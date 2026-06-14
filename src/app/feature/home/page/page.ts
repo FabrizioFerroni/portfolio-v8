@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'home',
+  selector: 'app-home',
   imports: [],
   templateUrl: './page.html',
   styleUrl: './page.css',
