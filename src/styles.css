@@ -150,7 +150,7 @@
 }
 
 .animate-spin-slow {
-  animation: spin 3s linear infinite;
+  animation: spin 6s linear infinite;
 }
 
 * {
