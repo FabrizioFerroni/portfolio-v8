@@ -37,12 +37,12 @@ export class Navbar implements OnInit, OnDestroy {
   );
 
   navLinks: NavLinks[] = [
-    { name: 'Inicio', fragment: 'hero' },
-    { name: 'Sobre mí', fragment: 'about' },
-    { name: 'Habilidades', fragment: 'skills' },
-    { name: 'Proyectos', fragment: 'projects' },
-    { name: 'Experiencia', fragment: 'experience' },
-    { name: 'Contacto', fragment: 'contact' },
+    { name: 'Inicio', fragment: 'inicio' },
+    { name: 'Sobre mí', fragment: 'sobre-mi' },
+    { name: 'Habilidades', fragment: 'habilidades' },
+    { name: 'Proyectos', fragment: 'proyectos' },
+    { name: 'Experiencia', fragment: 'experiencia' },
+    { name: 'Contacto', fragment: 'contacto' },
   ];
 
   private handleScroll = () => {

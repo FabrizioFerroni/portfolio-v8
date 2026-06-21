@@ -1,5 +1,81 @@
-<section id="hero" class="relative min-h-screen flex items-center pt-16 md:pt-0">
+<section id="inicio" class="relative min-h-screen flex items-center pt-16 md:pt-0">
   <app-navbar />
   <div class="absolute inset-0 bg-gradient-to-br from-background to-background/50 z-0"></div>
-  <div class="container mx-auto px-4 z-10 mt-8 md:mt-0">hero section</div>
+  <div class="container mx-auto px-4 z-10 mt-8 md:mt-0">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+      <div class="max-w-xl">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">
+          Hola, soy <span class="text-primary">Fabrizio</span>
+        </h1>
+        <app-typewriter />
+        <p class="text-lg md:text-xl text-muted-foreground mb-8">
+          Construyo aplicaciones web y móviles con pasión por la experiencia de usuario y el código
+          limpio.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+          <a href="#proyectos" (click)="onNavClick($event, 'proyectos')" z-button zSize="lg">
+            Ver Proyectos
+          </a>
+          <a
+            href="#contacto"
+            (click)="onNavClick($event, 'contacto')"
+            z-button
+            zSize="lg"
+            zType="outline">
+            Contactar
+          </a>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a
+            href="https://github.com/FabrizioFerroni"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-primary transition-colors">
+            <ng-icon name="lucideGithub" class="h-24 w-24" />
+            <span class="sr-only">GitHub</span>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/fabrizio-ferroni/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-primary transition-colors">
+            <ng-icon name="lucideLinkedin" class="h-4 w-4" />
+            <span class="sr-only">LinkedIn</span>
+          </a>
+          <a
+            href="mailto:hola@fabriziodev.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-primary transition-colors">
+            <ng-icon name="lucideMail" class="h-4 w-4" />
+            <span class="sr-only">Mail</span>
+          </a>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl">
+          <img
+            ngSrc="/img/images/hero-image.png"
+            alt="Fabrizio"
+            fill
+            class="object-cover"
+            priority />
+        </div>
+        <span class="block text-[.45rem] text-muted-foreground mt-2 text-center italic">
+          (Imagen generada por IA)
+        </span>
+        <div
+          class="hidden md:block absolute -bottom-6 -left-6 w-24 h-24 md:w-48 md:h-48 bg-primary/10 rounded-full blur-3xl"></div>
+        <div
+          class="hidden md:block absolute -top-6 -right-6 w-36 h-36 md:w-72 md:h-72 bg-primary/10 rounded-full blur-3xl"></div>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <a href="#sobre-mi" (click)="onNavClick($event, 'sobre-mi')" aria-label="Scroll down">
+      <ng-icon name="lucideArrowDown" class="h-4 w-4" />
+    </a>
+  </div>
 </section>
