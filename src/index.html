@@ -1,11 +1,54 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <title>PortfolioV8</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <script>
+      (function () {
+        const html = document.documentElement;
+
+        try {
+          const theme = localStorage.theme;
+          const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+
+          const isSystem = theme === 'system' || !('theme' in localStorage);
+          const isDark = theme === 'dark' || (isSystem && prefersDark);
+          html.classList.add('scheme-light-dark');
+          html.classList.toggle('dark', isDark);
+          html.setAttribute('data-theme', theme ?? 'system');
+        } catch (_) {}
+      })();
+    </script>
+
+    <script>
+      (function () {
+        try {
+          const colors = {
+            Amarillo: { value: '47.9 95.8% 53.1%', foreground: '26 83.3% 14.1%' },
+            Azul: { value: '221.2 83.2% 53.3%', foreground: '210 20% 98%' },
+            Naranja: { value: '24.6 95% 53.1%', foreground: '60 9.1% 97.8%' },
+            Rojo: { value: '346.8 77.2% 49.8%', foreground: '355.7 100% 97.3%' },
+            Rosa: { value: '316.6 73.1% 52.4%', foreground: '210 20% 98%' },
+            Turquesa: { value: '189 94% 43%', foreground: '210 20% 98%' },
+            Verde: { value: '142.1 76.2% 36.3%', foreground: '355.7 100% 97.3%' },
+            Violeta: { value: '262.1 83.3% 57.8%', foreground: '210 20% 98%' },
+          };
+
+          const DEFAULT_COLOR = 'Azul';
+          const saved = localStorage.getItem('color') || DEFAULT_COLOR;
+          const selected = colors[saved] || colors[DEFAULT_COLOR];
+
+          const root = document.documentElement;
+          root.style.setProperty('--primary', 'hsl(' + selected.value + ')');
+          root.style.setProperty('--primary-foreground', 'hsl(' + selected.foreground + ')');
+          root.style.setProperty('--ring', 'hsl(' + selected.value + ')');
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
     <app-root></app-root>

@@ -1,0 +1,108 @@
+<div class="space-y-6 px-4 select-none">
+  <!-- tema -->
+  <div>
+    <h3 class="text-lg font-medium mb-3">Modo</h3>
+    <div class="grid grid-cols-3 gap-2">
+      <button
+        type="button"
+        z-button
+        [zType]="currentTheme === EDarkModes.LIGHT ? 'default' : 'outline'"
+        (click)="handleThemeChange(EDarkModes.LIGHT)"
+        class="flex flex-col items-center justify-between p-4 h-auto cursor-pointer">
+        <ng-icon name="lucideSun" class="mb-2 h-5 w-5" />
+        <span>Claro</span>
+      </button>
+
+      <button
+        type="button"
+        z-button
+        [zType]="currentTheme === EDarkModes.DARK ? 'default' : 'outline'"
+        (click)="handleThemeChange(EDarkModes.DARK)"
+        class="flex flex-col items-center justify-between p-4 h-auto cursor-pointer">
+        <ng-icon name="lucideMoon" class="mb-2 h-5 w-5" />
+        <span>Oscuro</span>
+      </button>
+
+      <button
+        type="button"
+        z-button
+        [zType]="currentTheme === EDarkModes.SYSTEM ? 'default' : 'outline'"
+        (click)="handleThemeChange(EDarkModes.SYSTEM)"
+        class="flex flex-col items-center justify-between p-4 h-auto cursor-pointer">
+        <ng-icon name="lucideMonitor" class="mb-2 h-5 w-5" />
+        <span>Sistema</span>
+      </button>
+    </div>
+  </div>
+  <!-- fin tema -->
+  <!-- idioma -->
+  <div>
+    <h3 class="text-lg font-medium mb-3">Idioma</h3>
+    <div class="grid grid-cols-2 gap-2">
+      @for (lang of languageOptions; track lang.code) {
+        <div class="relative">
+          <button
+            type="button"
+            z-button
+            [zType]="language === lang.code ? 'default' : 'outline'"
+            (click)="handleLanguageChange(lang.code)"
+            [zDisabled]="lang.disabled"
+            [class]="
+              lang.disabled
+                ? 'flex flex-col items-center justify-between p-4 h-auto w-full opacity-70 cursor-not-allowed'
+                : 'flex flex-col items-center justify-between p-4 h-auto w-full cursor-pointer'
+            ">
+            <div class="relative w-12 h-8 mb-2 overflow-hidden rounded shadow-sm border">
+              <img [src]="lang.flag" [alt]="lang.name" class="" />
+            </div>
+            <span>{{ lang.name }}</span>
+            @if (lang.disabled) {
+              <z-badge
+                zType="outline"
+                zShape="pill"
+                class="absolute top-1 right-1 px-1 py-0 h-5 text-xs bg-background/80 backdrop-blur-sm">
+                <ng-icon name="lucideLock" class="h-3 w-3 mr-1" />
+                Próximamente
+              </z-badge>
+            }
+          </button>
+        </div>
+      }
+    </div>
+    <p class="text-xs text-muted-foreground mt-2">
+      <ng-icon name="lucideGlobe" class="inline-block mr-1 h-3 w-3" />
+      Actualmente solo disponible en español. Más idiomas próximamente.
+    </p>
+  </div>
+  <!-- fin idiomas -->
+  <!-- colores -->
+  <div>
+    <h3 class="text-lg font-medium mb-3">Color primario</h3>
+    <div class="grid grid-cols-4 gap-2">
+      @for (color of colorOptions; track color.name) {
+        <div>
+          <input
+            type="radio"
+            [id]="color.name"
+            [value]="color.value"
+            name="primaryColor"
+            class="sr-only peer"
+            [checked]="currentColor === color.name"
+            (change)="handleColorSelected(color.name)" />
+          <label
+            [for]="color.name"
+            class="flex flex-col items-center justify-between rounded-md border-2 border-muted p-2 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer"
+            [style]="
+              currentColor === color.name ? 'border-color:' + 'hsl(' + color.value + ')' : ''
+            ">
+            <span
+              class="h-8 w-8 rounded-full mb-1"
+              [style]="'background-color:' + 'hsl(' + color.value + ')'"></span>
+            <span class="text-xs">{{ color.name }}</span>
+          </label>
+        </div>
+      }
+    </div>
+  </div>
+  <!-- fin colores -->
+</div>
