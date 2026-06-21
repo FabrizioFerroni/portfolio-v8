@@ -27,6 +27,13 @@
             </div>
           </ng-template>
 
+          <ng-template #databaseTpl>
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideDatabase" class="h-4 w-4" />
+              Base de datos
+            </div>
+          </ng-template>
+
           <ng-template #toolsTpl>
             <div class="flex items-center gap-2">
               <ng-icon name="lucideWrench" class="h-4 w-4" />
@@ -45,6 +52,13 @@
             <div class="flex items-center gap-2">
               <ng-icon name="lucideServer" class="h-4 w-4" />
               Backend
+            </div>
+          </z-select-item>
+
+          <z-select-item zValue="database" [zTemplate]="databaseTpl">
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideDatabase" class="h-4 w-4" />
+              Base de datos
             </div>
           </z-select-item>
 

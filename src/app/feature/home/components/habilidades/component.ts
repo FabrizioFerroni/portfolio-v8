@@ -9,7 +9,7 @@ import { ZardSelectImports } from '@/shared/components/select';
 import { NgOptimizedImage } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMonitor, lucideServer, lucideWrench } from '@ng-icons/lucide';
+import { lucideDatabase, lucideMonitor, lucideServer, lucideWrench } from '@ng-icons/lucide';
 
 const skillCategories = [
   {
@@ -32,14 +32,31 @@ const skillCategories = [
     label: 'Backend',
     icon: 'lucideServer',
     skills: [
-      { name: 'Node.js', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Express', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'NestJS', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'MongoDB', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'PostgreSQL', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'GraphQL', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Firebase', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Docker', logo: '/img/placeholder.svg?height=60&width=60' },
+      { name: 'NestJS', logo: '/img/logos/backend/nestjs.svg?height=60&width=60' },
+      { name: 'Node.js', logo: '/img/logos/backend/nodejs.svg?height=60&width=60' },
+      { name: 'Spring Boot', logo: '/img/logos/backend/spring.svg?height=60&width=60' },
+      { name: 'Java', logo: '/img/logos/backend/java.svg?height=60&width=60' },
+      { name: 'C#', logo: '/img/logos/backend/csharp.svg?height=60&width=60' },
+      { name: '.Net Core', logo: '/img/logos/backend/dotnetcore.svg?height=60&width=60' },
+      { name: 'Laravel', logo: '/img/logos/backend/laravel.svg?height=60&width=60' },
+      { name: 'PHP', logo: '/img/logos/backend/php.svg?height=60&width=60' },
+    ],
+  },
+  {
+    key: 'database',
+    label: 'Bases de datos',
+    icon: 'lucideDatabase',
+    skills: [
+      { name: 'MySQL', logo: '/img/logos/databases/mysql.svg?height=60&width=60' },
+      { name: 'PostgreSQL', logo: '/img/logos/databases/postgresql.svg?height=60&width=60' },
+      {
+        name: 'MS SQL Server',
+        logo: '/img/logos/databases/mssqlserver2022.svg?height=60&width=60',
+      },
+      { name: 'MongoDB', logo: '/img/logos/databases/mongodb.svg?height=60&width=60' },
+      { name: 'Redis', logo: '/img/logos/databases/redis.svg?height=60&width=60' },
+      { name: 'SQL Lite', logo: '/img/logos/databases/sqllite.svg?height=60&width=60' },
+      { name: 'MariaDB', logo: '/img/logos/databases/mariadb.svg?height=60&width=60' },
     ],
   },
   {
@@ -47,14 +64,14 @@ const skillCategories = [
     label: 'Herramientas',
     icon: 'lucideWrench',
     skills: [
-      { name: 'Git', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'GitHub', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'VS Code', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Figma', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Jest', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'AWS', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Vercel', logo: '/img/placeholder.svg?height=60&width=60' },
-      { name: 'Netlify', logo: '/img/placeholder.svg?height=60&width=60' },
+      { name: 'Git', logo: '/img/logos/tools/git.svg?height=60&width=60' },
+      { name: 'GitHub Actions', logo: '/img/logos/tools/githubactions.svg?height=60&width=60' },
+      { name: 'VS Code', logo: '/img/logos/tools/vscode.svg?height=60&width=60' },
+      { name: 'Docker', logo: '/img/logos/tools/docker.svg?height=60&width=60' },
+      { name: 'Portainer', logo: '/img/logos/tools/portainer.svg?height=60&width=60' },
+      { name: 'AWS', logo: '/img/logos/tools/aws.svg?height=60&width=60' },
+      { name: 'Nginx', logo: '/img/logos/tools/nginx.svg?height=60&width=60' },
+      { name: 'Netlify', logo: '/img/logos/tools/netlify.svg?height=60&width=60' },
     ],
   },
 ] as const satisfies SkillCategory[];
@@ -86,7 +103,7 @@ interface SkillCategory {
   ],
   templateUrl: './component.html',
   styleUrl: './component.css',
-  viewProviders: [provideIcons({ lucideMonitor, lucideServer, lucideWrench })],
+  viewProviders: [provideIcons({ lucideMonitor, lucideServer, lucideWrench, lucideDatabase })],
 })
 export class Habilidades {
   activeTab = signal<string>('frontend');
