@@ -157,3 +157,9 @@
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--primary) 50%, transparent) var(--background);
 }
+
+.outFocus,
+z-select,
+input {
+  @apply outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0;
+}

@@ -1,0 +1,99 @@
+<section id="habilidades" class="py-20">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">Mis Habilidades</h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        He trabajado con diversas tecnologías a lo largo de mi carrera. Estas son algunas de mis
+        principales habilidades técnicas.
+      </p>
+    </div>
+    <f-tabs [value]="activeTab()">
+      <div class="md:hidden mb-8">
+        <z-select
+          class="w-full outFocus"
+          [zValue]="activeTab()"
+          (zSelectionChange)="setActiveTab($event)">
+          <ng-template #frontendTpl>
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideMonitor" class="h-4 w-4" />
+              Frontend
+            </div>
+          </ng-template>
+
+          <ng-template #backendTpl>
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideServer" class="h-4 w-4" />
+              Backend
+            </div>
+          </ng-template>
+
+          <ng-template #toolsTpl>
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideWrench" class="h-4 w-4" />
+              Herramientas
+            </div>
+          </ng-template>
+
+          <z-select-item zValue="frontend" [zTemplate]="frontendTpl">
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideMonitor" class="h-4 w-4" />
+              Frontend
+            </div>
+          </z-select-item>
+
+          <z-select-item zValue="backend" [zTemplate]="backendTpl">
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideServer" class="h-4 w-4" />
+              Backend
+            </div>
+          </z-select-item>
+
+          <z-select-item zValue="tools" [zTemplate]="toolsTpl">
+            <div class="flex items-center gap-2">
+              <ng-icon name="lucideWrench" class="h-4 w-4" />
+              Herramientas
+            </div>
+          </z-select-item>
+        </z-select>
+      </div>
+
+      <div class="hidden md:block">
+        <f-tabs-list class="flex w-full flex-row mb-8 h-auto gap-1">
+          @for (cat of skillCategories; track cat.key) {
+            <f-tabs-trigger
+              [value]="cat.key"
+              class="flex-1 flex flex-col items-center justify-center gap-1.5 py-3 h-auto whitespace-normal text-xs sm:text-sm">
+              <ng-icon [name]="cat.icon" class="h-5 w-5 shrink-0" />
+              <span>{{ cat.label }}</span>
+            </f-tabs-trigger>
+          }
+        </f-tabs-list>
+      </div>
+
+      @for (cat of skillCategories; track cat.key) {
+        <f-tabs-content [value]="cat.key" class="mt-0" [id]="cat.key">
+          <f-card [cId]="'hability-' + cat.key">
+            <f-card-content cClass="p-6" cId="content-hability-{{ cat.key }}">
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
+                @for (skill of cat.skills; track skill.name) {
+                  <div [id]="skill.name" class="flex flex-col items-center justify-center group">
+                    <div
+                      class="relative w-16 h-16 mb-3 transition-transform duration-300 group-hover:scale-110">
+                      <img
+                        [ngSrc]="skill.logo || '/img/placeholder.svg'"
+                        [alt]="skill.name"
+                        fill
+                        class="object-contain"
+                        priority />
+                    </div>
+                    <span class="text-sm font-medium">{{ skill.name }}</span>
+                  </div>
+                }
+              </div>
+            </f-card-content>
+          </f-card>
+        </f-tabs-content>
+      }
+    </f-tabs>
+  </div>
+</section>
