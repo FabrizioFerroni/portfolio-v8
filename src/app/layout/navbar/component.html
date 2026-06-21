@@ -1,0 +1,77 @@
+<header [class]="headerClass()">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <a routerLink="/" class="text-xl font-bold">
+        <span class="text-primary">FabrizioDev</span> Portfolio.
+      </a>
+
+      <!-- Menu escritorio -->
+      <div class="hidden md:flex items-center space-x-2">
+        <nav class="flex items-center space-x-6 mr-4">
+          @for (link of navLinks; track link.name) {
+            <a
+              [href]="'#' + link.fragment"
+              (click)="onNavClick($event, link.fragment)"
+              class="text-sm font-medium hover:text-primary transition-colors">
+              {{ link.name }}
+            </a>
+          }
+        </nav>
+        <button
+          type="button"
+          z-button
+          zType="ghost"
+          zSize="icon"
+          class="h-9 w-9 rounded-full cursor-pointer"
+          (click)="openThemePicker()">
+          <ng-icon name="lucideSettings" class="h-4 w-4 animate-spin-slow" />
+          <span class="sr-only">Personalizar tema</span>
+        </button>
+
+        <button z-button type="button" class="cursor-pointer">Descargar CV</button>
+      </div>
+      <!-- Fin menu escritorio -->
+      <!-- Botonera menu movil -->
+      <div class="flex items-center md:hidden">
+        <button
+          type="button"
+          z-button
+          zType="ghost"
+          zSize="icon"
+          class="h-9 w-9 rounded-full cursor-pointer"
+          (click)="openThemePicker()">
+          <ng-icon name="lucideSettings" class="h-4 w-4 animate-spin-slow" />
+          <span class="sr-only">Personalizar tema</span>
+        </button>
+        <button class="ml-2" aria-label="Toggle menu" (click)="setIsOpen(!isOpen())">
+          @if (isOpen()) {
+            <ng-icon name="lucideX" class="h-4 w-4" />
+          } @else {
+            <ng-icon name="lucideMenu" class="h-4 w-4" />
+          }
+        </button>
+      </div>
+      <!-- Fin botonera menu movil -->
+    </div>
+  </div>
+
+  <!-- Menú movil -->
+  @if (isOpen()) {
+    <div class="md:hidden bg-background/95 backdrop-blur-md">
+      <div class="container mx-auto px-4 py-4">
+        <nav class="flex flex-col space-y-4">
+          @for (link of navLinks; track link.name) {
+            <a
+              [href]="'#' + link.fragment"
+              (click)="onNavClick($event, link.fragment)"
+              class="text-sm font-medium py-2 hover:text-primary transition-colors">
+              {{ link.name }}
+            </a>
+          }
+          <button z-button type="button" class="cursor-pointer">Descargar CV</button>
+        </nav>
+      </div>
+    </div>
+  }
+  <!-- Fin Menú movil -->
+</header>
