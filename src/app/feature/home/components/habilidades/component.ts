@@ -55,7 +55,7 @@ const skillCategories = [
       },
       { name: 'MongoDB', logo: '/img/logos/databases/mongodb.svg?height=60&width=60' },
       { name: 'Redis', logo: '/img/logos/databases/redis.svg?height=60&width=60' },
-      { name: 'SQL Lite', logo: '/img/logos/databases/sqllite.svg?height=60&width=60' },
+      { name: 'SQLite', logo: '/img/logos/databases/sqlite.svg?height=60&width=60' },
       { name: 'MariaDB', logo: '/img/logos/databases/mariadb.svg?height=60&width=60' },
     ],
   },
