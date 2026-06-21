@@ -1,0 +1,78 @@
+<section id="sobre-mi" class="py-20 bg-muted/30">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="w-full md:w-2/5">
+        <div class="relative aspect-square max-w-md mx-auto w-full">
+          <img
+            ngSrc="/img/images/profile.jpeg"
+            alt="Fabrizio"
+            width="400"
+            height="400"
+            class="rounded-xl object-cover shadow-lg w-full h-full"
+            priority />
+        </div>
+      </div>
+      <div class="w-full md:w-3/5">
+        <h2 class="text-3xl font-bold mb-6">Sobre Mí</h2>
+
+        <p class="text-lg text-muted-foreground mb-6">
+          Soy un desarrollador fullstack con más de 1 año de experiencia construyendo aplicaciones
+          web y móviles. Me especializo en JavaScript/TypeScript con Angular para el frontend y
+          NestJs o Java con Spring Boot para el backend.
+        </p>
+
+        <p class="text-lg text-muted-foreground mb-8">
+          Mi enfoque se centra en crear soluciones elegantes para problemas complejos, con un fuerte
+          énfasis en la experiencia del usuario, el rendimiento y las mejores prácticas de
+          desarrollo. Me apasiona aprender nuevas tecnologías y compartir conocimientos con la
+          comunidad.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <f-card cId="education" cClass="">
+            <f-card-content cClass="p-4">
+              <h3 class="font-semibold mb-1">Educación</h3>
+              <p class="text-sm text-muted-foreground">
+                Bachiller en informatica, Instituto La Santisima Trinidad
+              </p>
+            </f-card-content>
+          </f-card>
+
+          <f-card cId="content" cClass="">
+            <f-card-content cClass="p-4">
+              <h3 class="font-semibold mb-1">Ubicación</h3>
+              <p class="text-sm text-muted-foreground">Córdoba, Argentina</p>
+            </f-card-content>
+          </f-card>
+
+          <f-card cId="content" cClass="">
+            <f-card-content cClass="p-4">
+              <h3 class="font-semibold mb-1">Idiomas</h3>
+              <p class="text-sm text-muted-foreground">Español (Nativo), Inglés (Básico)</p>
+            </f-card-content>
+          </f-card>
+
+          <f-card cId="content" cClass="">
+            <f-card-content cClass="p-4">
+              <h3 class="font-semibold mb-1">Intereses</h3>
+              <p class="text-sm text-muted-foreground">
+                Open Source, Codigo Limpio, Arquitectura de Software
+              </p>
+            </f-card-content>
+          </f-card>
+        </div>
+
+        <a
+          href="/cv/CV FabrizioFerroni 2026.pdf"
+          download="CV Fabrizio Ferroni.pdf"
+          z-button
+          zSize="lg"
+          zType="outline"
+          class="cursor-pointer">
+          <ng-icon name="lucideDownload" class="mr-2 h-4 w-4" />
+          Descargar CV
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
