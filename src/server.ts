@@ -13,7 +13,7 @@ const app = express();
 const angularApp = new AngularNodeAppEngine({
   allowedHosts: process.env['ALLOWED_HOST']
     ? process.env['ALLOWED_HOST'].split(',')
-    : ['localhost', '192.168.0.64'],
+    : ['localhost', '192.168.0.64', '192.168.0.74'],
 });
 
 /**

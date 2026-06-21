@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Hero, SobreMi } from '../components';
+import { Habilidades, Hero, SobreMi } from '../components';
 
 @Component({
   selector: 'app-home',
-  imports: [Hero, SobreMi],
+  imports: [Hero, SobreMi, Habilidades],
   templateUrl: './page.html',
   styleUrl: './page.css',
 })
