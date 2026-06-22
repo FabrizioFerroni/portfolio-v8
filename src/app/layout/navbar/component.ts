@@ -51,6 +51,7 @@ export class Navbar implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+      this.handleScroll();
       window.addEventListener('scroll', this.handleScroll);
     }
   }
