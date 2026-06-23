@@ -1,5 +1,4 @@
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ThemePicker } from '@/shared/components/fabriziodev';
 import { ZardSheetService } from '@/shared/components/sheet';
 import { LayoutService } from '@/shared/services';
 import { mergeClasses } from '@/shared/utils';
@@ -62,7 +61,8 @@ export class Navbar implements OnInit, OnDestroy {
     }
   }
 
-  openThemePicker() {
+  async openThemePicker() {
+    const { ThemePicker } = await import('@/shared/components/fabriziodev');
     this.sheetService.create({
       zTitle: 'Personalizar tema',
       zDescription: `Configura el aspecto de tu portfolio según tus preferencias.`,
