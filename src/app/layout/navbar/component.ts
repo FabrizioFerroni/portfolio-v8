@@ -3,7 +3,16 @@ import { ZardSheetService } from '@/shared/components/sheet';
 import { LayoutService } from '@/shared/services';
 import { mergeClasses } from '@/shared/utils';
 import { isPlatformBrowser } from '@angular/common';
-import { Component, computed, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideSettings, lucideX } from '@ng-icons/lucide';
@@ -23,6 +32,9 @@ interface NavLinks {
 export class Navbar implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private sheetService = inject(ZardSheetService);
+  activeFragment = signal<string>('');
+  private observer: IntersectionObserver | null = null;
+
   layout = inject(LayoutService);
   isMovile = this.layout.isMobile;
   isOpen = signal<boolean>(false);
@@ -48,6 +60,10 @@ export class Navbar implements OnInit, OnDestroy {
     this.scrolled.set(window.scrollY > 10);
   };
 
+  constructor() {
+    afterNextRender(() => this.initScrollSpy());
+  }
+
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.handleScroll();
@@ -59,6 +75,34 @@ export class Navbar implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       window.removeEventListener('scroll', this.handleScroll);
     }
+
+    this.observer?.disconnect();
+  }
+
+  private initScrollSpy(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    console.log('entra aca');
+
+    const options: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '-40% 0px -55% 0px',
+      threshold: 0,
+    };
+
+    this.observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          this.activeFragment.set(entry.target.id);
+        }
+      }
+    }, options);
+
+    // Observar cada sección por su id
+    this.navLinks.forEach(link => {
+      const el = document.getElementById(link.fragment);
+      if (el) this.observer!.observe(el);
+    });
   }
 
   async openThemePicker() {

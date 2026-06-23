@@ -12,6 +12,8 @@
             <a
               [href]="'#' + link.fragment"
               (click)="onNavClick($event, link.fragment)"
+              [class.text-primary]="activeFragment() === link.fragment"
+              [class.font-semibold]="activeFragment() === link.fragment"
               class="text-sm font-medium hover:text-primary transition-colors">
               {{ link.name }}
             </a>
@@ -71,6 +73,8 @@
             <a
               [href]="'#' + link.fragment"
               (click)="onNavClick($event, link.fragment)"
+              [class.text-primary]="activeFragment() === link.fragment"
+              [class.font-semibold]="activeFragment() === link.fragment"
               class="text-sm font-medium py-2 hover:text-primary transition-colors">
               {{ link.name }}
             </a>
