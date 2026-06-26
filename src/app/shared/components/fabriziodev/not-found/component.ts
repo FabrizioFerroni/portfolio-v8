@@ -1,4 +1,4 @@
-import { Navbar } from '@/layout';
+import { Footer, Navbar } from '@/layout';
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Component, inject, PLATFORM_ID, RESPONSE_INIT, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -8,7 +8,7 @@ import { lucideArrowLeft, lucideHome, lucideRefreshCw, lucideSearch } from '@ng-
 import { Location } from '@angular/common';
 
 @Component({
-  imports: [Navbar, NgOptimizedImage, RouterLink, ZardButtonComponent, NgIcon],
+  imports: [Navbar, NgOptimizedImage, RouterLink, ZardButtonComponent, NgIcon, Footer],
   templateUrl: './component.html',
   styleUrl: './component.css',
   viewProviders: [provideIcons({ lucideHome, lucideArrowLeft, lucideSearch, lucideRefreshCw })],
