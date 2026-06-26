@@ -20,6 +20,7 @@
           html.classList.add('scheme-light-dark');
           html.classList.toggle('dark', isDark);
           html.setAttribute('data-theme', theme ?? 'system');
+          html.style.overflow = 'hidden';
         } catch (_) {}
       })();
     </script>
