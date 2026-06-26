@@ -1,0 +1,73 @@
+<footer class="bg-background border-t py-12">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-6 md:mb-0">
+        <a routerLink="/" class="text-xl font-bold">
+          <span class="text-primary">FabrizioDev</span> Portfolio.
+        </a>
+        <p class="text-muted-foreground mt-2 max-w-md">
+          Desarrollador Fullstack especializado en crear experiencias digitales excepcionales.
+        </p>
+      </div>
+
+      <div class="flex space-x-6">
+        <a
+          href="https://github.com/FabrizioFerroni"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-primary transition-colors">
+          <ng-icon name="lucideGithub" class="h-24 w-24" />
+          <span class="sr-only">GitHub</span>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/fabrizio-ferroni/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-primary transition-colors">
+          <ng-icon name="lucideLinkedin" class="h-4 w-4" />
+          <span class="sr-only">LinkedIn</span>
+        </a>
+        <a
+          href="mailto:hola@fabriziodev.tech"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-primary transition-colors">
+          <ng-icon name="lucideMail" class="h-4 w-4" />
+          <span class="sr-only">Mail</span>
+        </a>
+      </div>
+    </div>
+    <div class="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-sm text-muted-foreground">
+        © 2026 - {{ currentYear }} Fabrizio. Todos los derechos reservados.
+      </p>
+
+      <nav class="flex gap-4 mt-4 md:mt-0">
+        <a
+          routerLink="/politica-privacidad"
+          class="text-sm text-muted-foreground hover:text-primary transition-colors">
+          Política de Privacidad
+        </a>
+        <a
+          routerLink="/terminos-servicio"
+          class="text-sm text-muted-foreground hover:text-primary transition-colors">
+          Términos de Servicio
+        </a>
+      </nav>
+    </div>
+
+    <div class="flex justify-center mt-6">
+      <div class="flex items-center gap-3 text-xs text-muted-foreground/70">
+        <span class="text-xs">Desarrollado con</span>
+        <div class="flex items-center gap-2">
+          <app-angular-icon
+            className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+          <app-nestjs-icon
+            className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+          <app-mongodb-icon
+            className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
