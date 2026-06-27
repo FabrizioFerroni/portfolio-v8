@@ -3,18 +3,28 @@ import {
   MongoDBIconComponent,
   NestJSIconComponent,
 } from '@/shared/components/fabriziodev/tech-icons';
+import { Rutas } from '@/shared/utils';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGithub, lucideLinkedin, lucideMail } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-footer',
-  imports: [RouterLink, NgIcon, AngularIconComponent, MongoDBIconComponent, NestJSIconComponent],
+  imports: [
+    RouterLink,
+    NgIcon,
+    AngularIconComponent,
+    MongoDBIconComponent,
+    NestJSIconComponent,
+    RouterLinkActive,
+  ],
   templateUrl: './component.html',
   styleUrl: './component.css',
   viewProviders: [provideIcons({ lucideGithub, lucideLinkedin, lucideMail })],
 })
 export class Footer {
   currentYear: number = new Date().getFullYear();
+  rutaPolitica = `/${Rutas.POLITICA_PRIVACIDAD}`;
+  rutaTerminos = `/${Rutas.TERMINOS_CONDICIONES}`;
 }
