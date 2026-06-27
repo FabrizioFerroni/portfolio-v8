@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { Habilidades, Hero, ProyectosHome, SobreMi } from '../components';
+import { Habilidades, Hero, ProyectosHome, SobreMi, Experiencias, Newsletter } from '../components';
 import { Footer } from '@/layout';
-import { Experiencias } from '../components/experiencias';
 
 @Component({
   selector: 'app-home',
-  imports: [Hero, SobreMi, Habilidades, ProyectosHome, Experiencias, Footer],
+  imports: [Hero, SobreMi, Habilidades, ProyectosHome, Experiencias, Newsletter, Footer],
   templateUrl: './page.html',
   styleUrl: './page.css',
 })
