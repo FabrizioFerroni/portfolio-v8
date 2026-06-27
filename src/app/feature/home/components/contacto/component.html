@@ -150,7 +150,7 @@
           <button
             z-button
             class="w-full cursor-pointer flex justify-center items-center"
-            [zDisabled]="isSubbmiting()">
+            [zDisabled]="isSubbmiting() || form.invalid">
             @if (isSubbmiting()) {
               <span class="flex items-center">
                 <svg
