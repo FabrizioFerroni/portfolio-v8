@@ -31,6 +31,7 @@ module.exports = tseslint.config(
         { type: 'element', prefix: '', style: 'kebab-case' },
       ],
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@angular-eslint/directive-selector': 'off',
     },
   },
   {
