@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Home, PoliticaPrivacidad, TerminosCondiciones } from './feature';
+import { Home, PoliticaPrivacidad, Proyectos, TerminosCondiciones } from './feature';
 import { NotFound } from './shared/components/fabriziodev';
 import { Rutas } from './shared/utils';
 
@@ -16,6 +16,10 @@ export const routes: Routes = [
   {
     path: Rutas.TERMINOS_CONDICIONES,
     component: TerminosCondiciones,
+  },
+  {
+    path: Rutas.PROYECTOS,
+    component: Proyectos,
   },
   {
     path: Rutas.NOT_FOUND,
