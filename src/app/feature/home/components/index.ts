@@ -4,3 +4,4 @@ export * from './habilidades';
 export * from './proyectos';
 export * from './experiencias';
 export * from './newsletter';
+export * from './testimonials';
