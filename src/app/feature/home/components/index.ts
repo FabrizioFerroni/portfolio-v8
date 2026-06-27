@@ -5,3 +5,4 @@ export * from './proyectos';
 export * from './experiencias';
 export * from './newsletter';
 export * from './testimonials';
+export * from './contacto';

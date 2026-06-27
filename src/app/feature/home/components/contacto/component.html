@@ -1,0 +1,204 @@
+<section id="contacto" class="py-20 bg-muted/30">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">Contacto</h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        ¿Tienes un proyecto en mente o quieres hablar sobre oportunidades de colaboración?
+        ¡Contáctame!
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <div class="flex flex-col gap-5">
+        <h3 class="text-xl font-semibold mb-6">Información de Contacto</h3>
+
+        <f-card>
+          <f-card-content cClass="flex items-center gap-4 p-4">
+            <div class="inline-flex bg-primary/10 p-3 rounded-full">
+              <ng-icon name="lucideMail" class="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h4 class="font-medium">Email</h4>
+              <p class="text-muted-foreground">hola@fabriziodev.tech</p>
+            </div>
+          </f-card-content>
+        </f-card>
+
+        <f-card>
+          <f-card-content cClass="flex items-center gap-4 p-4">
+            <div class="inline-flex bg-primary/10 p-3 rounded-full">
+              <ng-icon name="lucideMapPin" class="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h4 class="font-medium">Ubicación</h4>
+              <p class="text-muted-foreground">Córdoba, Argentina</p>
+            </div>
+          </f-card-content>
+        </f-card>
+
+        <f-card>
+          <f-card-content cClass="flex items-center gap-4 p-4">
+            <div class="inline-flex bg-primary/10 p-3 rounded-full">
+              <ng-icon name="lucideGlobe" class="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h4 class="font-medium">Sitio Web</h4>
+              <p class="text-muted-foreground">fabriziodev.tech</p>
+            </div>
+          </f-card-content>
+        </f-card>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold mb-6">Envíame un Mensaje</h3>
+
+        <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <z-form-field>
+                <label
+                  for="nameContact"
+                  class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                  z-form-label>
+                  Nombre
+                </label>
+                <z-form-control>
+                  <input
+                    z-input
+                    id="nameContact"
+                    formControlName="name"
+                    placeholder="Tu nombre"
+                    [zStatus]="nameControl!.invalid && nameControl!.touched ? 'error' : undefined"
+                    zRequired
+                    class="outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+                </z-form-control>
+                <z-form-message zType="error">{{ getNameError() }}</z-form-message>
+              </z-form-field>
+            </div>
+
+            <div class="space-y-2">
+              <z-form-field>
+                <label
+                  for="emailContact"
+                  class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                  z-form-label>
+                  Email
+                </label>
+                <z-form-control>
+                  <input
+                    z-input
+                    id="emailContact"
+                    type="email"
+                    formControlName="email"
+                    placeholder="Tu correo electronico"
+                    [zStatus]="emailControl!.invalid && emailControl!.touched ? 'error' : undefined"
+                    zRequired
+                    class="outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+                </z-form-control>
+                <z-form-message zType="error">{{ getEmailError() }}</z-form-message>
+              </z-form-field>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <z-form-field>
+              <label
+                for="subject"
+                class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                z-form-label>
+                Asunto
+              </label>
+              <z-form-control>
+                <input
+                  z-input
+                  id="subject"
+                  formControlName="subject"
+                  placeholder="Asunto del mensaje"
+                  [zStatus]="
+                    subjectControl!.invalid && subjectControl!.touched ? 'error' : undefined
+                  "
+                  zRequired
+                  class="outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+              </z-form-control>
+              <z-form-message zType="error">{{ getSubjectError() }}</z-form-message>
+            </z-form-field>
+          </div>
+
+          <div class="space-y-2">
+            <z-form-field>
+              <label
+                for="message"
+                class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                z-form-label>
+                Mensaje
+              </label>
+              <z-form-control>
+                <textarea
+                  id="message"
+                  rows="2"
+                  [zStatus]="
+                    messageControl!.invalid && messageControl!.touched ? 'error' : undefined
+                  "
+                  placeholder="Breve descripcion tu mensaje"
+                  class="resize-none outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                  z-input
+                  formControlName="message"></textarea>
+                <z-form-message zType="error">{{ getMessageError() }}</z-form-message>
+              </z-form-control>
+            </z-form-field>
+          </div>
+
+          <button
+            z-button
+            class="w-full cursor-pointer flex justify-center items-center"
+            [zDisabled]="isSubbmiting()">
+            @if (isSubbmiting()) {
+              <span class="flex items-center">
+                <svg
+                  class="animate-spin -ml-1 mr-2 h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Enviando...
+              </span>
+            } @else {
+              <span class="flex items-center justify-center">
+                <ng-icon name="lucideSend" class="mr-2 h-4 w-4" />
+                Enviar Mensaje
+              </span>
+            }
+          </button>
+        </form>
+
+        @if (status() === 'success') {
+          <z-alert
+            [zIcon]="successIcon"
+            class="mt-6 bg-green-50 border-green-200 text-green-800"
+            zTitle="¡Mensaje enviado!"
+            [zDescription]="messageStatus()" />
+
+          <ng-template #successIcon>
+            <ng-icon name="lucideCircleCheck" class="text-[hsl(108.92deg 52.05% 50.52%)] h-4 w-4" />
+          </ng-template>
+        } @else if (status() === 'error') {
+          <z-alert
+            zType="destructive"
+            zTitle="Error"
+            class="mt-6 bg-red-50 border-red-200 text-red-800"
+            [zDescription]="messageStatus()" />
+        }
+      </div>
+    </div>
+  </div>
+</section>

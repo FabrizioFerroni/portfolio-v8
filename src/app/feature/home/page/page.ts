@@ -7,6 +7,7 @@ import {
   Experiencias,
   Newsletter,
   Testimonials,
+  Contacto,
 } from '../components';
 import { Footer } from '@/layout';
 
@@ -20,6 +21,7 @@ import { Footer } from '@/layout';
     Experiencias,
     Newsletter,
     Testimonials,
+    Contacto,
     Footer,
   ],
   templateUrl: './page.html',
