@@ -82,8 +82,6 @@ export class Navbar implements OnInit, OnDestroy {
   private initScrollSpy(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    console.log('entra aca');
-
     const options: IntersectionObserverInit = {
       root: null,
       rootMargin: '-40% 0px -55% 0px',
