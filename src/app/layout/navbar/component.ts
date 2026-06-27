@@ -13,9 +13,11 @@ import {
   PLATFORM_ID,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideSettings, lucideX } from '@ng-icons/lucide';
+import { Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 interface NavLinks {
   name: string;
@@ -34,6 +36,7 @@ export class Navbar implements OnInit, OnDestroy {
   private sheetService = inject(ZardSheetService);
   activeFragment = signal<string>('');
   private observer: IntersectionObserver | null = null;
+  private router = inject(Router);
 
   layout = inject(LayoutService);
   isMovile = this.layout.isMobile;
@@ -56,12 +59,34 @@ export class Navbar implements OnInit, OnDestroy {
     { name: 'Contacto', fragment: 'contacto' },
   ];
 
+  private get lastFragment(): string {
+    return this.navLinks[this.navLinks.length - 1].fragment;
+  }
+
   private handleScroll = () => {
     this.scrolled.set(window.scrollY > 10);
+
+    const isHome = this.router.url === '/' || this.router.url.startsWith('/#');
+    if (!isHome) return;
+
+    const threshold = 50;
+    const nearBottom =
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - threshold;
+
+    if (nearBottom) {
+      this.activeFragment.set(this.lastFragment);
+    }
   };
 
   constructor() {
     afterNextRender(() => this.initScrollSpy());
+
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(e => {
+      const isHome = (e as NavigationEnd).urlAfterRedirects === '/';
+      if (!isHome) {
+        this.activeFragment.set('');
+      }
+    });
   }
 
   ngOnInit() {
@@ -96,7 +121,6 @@ export class Navbar implements OnInit, OnDestroy {
       }
     }, options);
 
-    // Observar cada sección por su id
     this.navLinks.forEach(link => {
       const el = document.getElementById(link.fragment);
       if (el) this.observer!.observe(el);
@@ -126,7 +150,19 @@ export class Navbar implements OnInit, OnDestroy {
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      document.getElementById(fragment)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const isHome = this.router.url === '/' || this.router.url.startsWith('/#');
+
+      if (isHome) {
+        document.getElementById(fragment)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        this.router.navigate(['/']).then(() => {
+          setTimeout(() => {
+            document
+              .getElementById(fragment)
+              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        });
+      }
     }
   }
 }
