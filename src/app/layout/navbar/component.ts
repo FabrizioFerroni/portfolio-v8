@@ -52,7 +52,7 @@ export class Navbar implements OnInit, OnDestroy {
     { name: 'Sobre mí', fragment: 'sobre-mi' },
     { name: 'Habilidades', fragment: 'habilidades' },
     { name: 'Proyectos', fragment: 'proyectos' },
-    { name: 'Experiencia', fragment: 'experiencia' },
+    { name: 'Experiencia', fragment: 'experiencias' },
     { name: 'Contacto', fragment: 'contacto' },
   ];
 
