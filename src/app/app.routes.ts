@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-import { Home } from './feature';
+import { Home, PoliticaPrivacidad, TerminosCondiciones } from './feature';
 import { NotFound } from './shared/components/fabriziodev';
 import { Rutas } from './shared/utils';
-import { PoliticaPrivacidad } from './feature/politica-privacidad';
 
 export const routes: Routes = [
   {
@@ -13,6 +12,10 @@ export const routes: Routes = [
   {
     path: Rutas.POLITICA_PRIVACIDAD,
     component: PoliticaPrivacidad,
+  },
+  {
+    path: Rutas.TERMINOS_CONDICIONES,
+    component: TerminosCondiciones,
   },
   {
     path: Rutas.NOT_FOUND,
