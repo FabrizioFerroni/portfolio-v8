@@ -1,20 +1,10 @@
 import { Routes } from '@angular/router';
-/* import {
-  Home,
-  Mantenimiento,
-  PoliticaPrivacidad,
-  Proyecto,
-  Proyectos,
-  TerminosCondiciones,
-} from './feature';
-import { NotFound } from './shared/components/fabriziodev'; */
 import { Rutas } from './shared/utils';
 import { maintenanceGuard } from './core';
 
 export const routes: Routes = [
   {
     path: Rutas.HOME,
-    pathMatch: 'full',
     canActivate: [maintenanceGuard],
     loadComponent: () => import('./feature').then(m => m.Home),
   },
