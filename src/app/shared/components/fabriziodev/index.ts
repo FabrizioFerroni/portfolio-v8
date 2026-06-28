@@ -10,3 +10,5 @@ export * from './not-found';
 export * from './loader';
 export * from './accordion';
 export * from './checkbox';
+export * from './tabs';
+export * from './dialog-image';
