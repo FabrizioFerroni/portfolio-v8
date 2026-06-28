@@ -1,54 +1,38 @@
-import { isPlatformBrowser } from '@angular/common';
-import {
-  Component,
-  input,
-  output,
-  signal,
-  OnInit,
-  ChangeDetectionStrategy,
-  ViewEncapsulation,
-  inject,
-  PLATFORM_ID,
-} from '@angular/core';
+import { LoaderService } from '@/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, inject } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
   template: `
     <div
       class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background transition-opacity duration-500"
-      [class.opacity-0]="!isLoading()"
-      [class.pointer-events-none]="!isLoading()"
-      [class.opacity-100]="isLoading()">
+      [class.opacity-0]="!loader.visible()"
+      [class.pointer-events-none]="!loader.visible()"
+      [class.opacity-100]="loader.visible()">
       <div class="relative">
-        <!-- Spinner exterior -->
-        <div
-          class="w-24 h-24 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
+        <div class="w-32 h-32 relative flex items-center justify-center">
+          <div
+            class="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
 
-        <!-- Iniciales en el centro -->
-        <div class="absolute inset-0 flex items-center justify-center">
-          <span class="text-2xl font-bold text-primary">FFD</span>
+          <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center z-10">
+            <span class="text-3xl font-bold text-primary">FFD</span>
+          </div>
         </div>
       </div>
 
-      <p class="mt-6 text-lg font-medium text-muted-foreground">Cargando...</p>
+      <div class="mt-8 text-lg font-medium text-muted-foreground flex items-center">
+        <span class="uppercase">Cargando</span>
+        <span class="flex w-12 justify-start ml-1">
+          <span class="animate-bounce mx-0.5 delay-100">.</span>
+          <span class="animate-bounce mx-0.5 delay-200">.</span>
+          <span class="animate-bounce mx-0.5 delay-300">.</span>
+        </span>
+      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class Loader implements OnInit {
-  readonly duration = input<number>(2500);
-  readonly loadingComplete = output<void>();
-
-  readonly isLoading = signal(true);
-  readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.isLoading.set(false);
-      if (!this.isBrowser) return;
-      document.documentElement.style.overflow = '';
-      this.loadingComplete.emit();
-    }, this.duration());
-  }
+export class Loader {
+  readonly loader = inject(LoaderService);
 }
