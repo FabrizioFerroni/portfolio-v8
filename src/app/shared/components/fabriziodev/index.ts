@@ -8,3 +8,5 @@ export * from './card-content';
 export * from './card-footer';
 export * from './not-found';
 export * from './loader';
+export * from './accordion';
+export * from './checkbox';

@@ -1,0 +1,394 @@
+<app-navbar />
+<main class="pt-0 pb-0 select-none">
+  <section class="bg-muted/30 py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4">Todos mis Proyectos</h1>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Explora mi portafolio completo de proyectos. Utiliza los filtros para encontrar proyectos
+          específicos.
+        </p>
+      </div>
+      <!-- barra de busqueda -->
+      <div class="flex flex-col md:flex-row gap-4 mb-8">
+        <div class="relative flex-grow">
+          <ng-icon
+            name="lucideSearch"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            z-input
+            type="text"
+            placeholder="Buscar proyectos..."
+            id="search"
+            [value]="searchTerm()"
+            class="h-10 pl-10 bg-muted/50 border-1 outFocus focus:border-primary"
+            autoComplete="search"
+            (input)="searchTerm.set($any($event.target).value)"
+            zRequired />
+
+          @if (searchTerm()) {
+            <button
+              (click)="searchTerm.set('')"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+              <ng-icon name="lucideX" class="h-4 w-4 text-muted-foreground hover:text-foreground" />
+            </button>
+          }
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            type="button"
+            z-button
+            [zType]="isOpenFilter() ? 'default' : 'outline'"
+            (click)="isOpenFilter.set(!isOpenFilter())"
+            class="h-10 whitespace-nowrap cursor-pointer">
+            <ng-icon name="lucideFilter" class="mr-2 h-4 w-4" />
+            Filtros
+            @if (
+              categoryFilter() !== 'all' || visibilityFilter() !== 'all' || techFilters().length > 0
+            ) {
+              <z-badge zType="secondary" class="ml-2">
+                @if (
+                  categoryFilter() !== 'all' &&
+                  visibilityFilter() !== 'all' &&
+                  techFilters().length > 0
+                ) {
+                  <span>3+</span>
+                } @else if (categoryFilter() !== 'all' && visibilityFilter() !== 'all') {
+                  <span>2</span>
+                } @else if (categoryFilter() !== 'all' || visibilityFilter() !== 'all') {
+                  <span>1</span>
+                } @else {
+                  <span>{{ techFilters().length }}</span>
+                }
+              </z-badge>
+            }
+          </button>
+
+          <z-select
+            class="[&>button]:h-10 [&>div]:h-10 h-10 w-full outFocus"
+            [zValue]="sortBy()"
+            (zSelectionChange)="setSortBy($event)">
+            <ng-template #masRecienteTpl>
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortDesc" class="h-4 w-4" />
+                Más recientes
+              </div>
+            </ng-template>
+
+            <ng-template #masAntiguoTpl>
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortAsc" class="h-4 w-4" />
+                Más antiguos
+              </div>
+            </ng-template>
+
+            <ng-template #nombreAZTpl>
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortAsc" class="h-4 w-4" />
+                Nombre A-Z
+              </div>
+            </ng-template>
+
+            <ng-template #nombreZATpl>
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortDesc" class="h-4 w-4" />
+                Nombre Z-A
+              </div>
+            </ng-template>
+
+            <z-select-item zValue="date-desc" [zTemplate]="masRecienteTpl">
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortDesc" class="h-4 w-4" />
+                Más recientes
+              </div>
+            </z-select-item>
+
+            <z-select-item zValue="date-asc" [zTemplate]="masAntiguoTpl">
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortAsc" class="h-4 w-4" />
+                Más antiguos
+              </div>
+            </z-select-item>
+
+            <z-select-item zValue="name-asc" [zTemplate]="nombreAZTpl">
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortAsc" class="h-4 w-4" />
+                Nombre A-Z
+              </div>
+            </z-select-item>
+
+            <z-select-item zValue="name-desc" [zTemplate]="nombreZATpl">
+              <div class="flex items-center gap-2">
+                <ng-icon name="lucideSortDesc" class="h-4 w-4" />
+                Nombre Z-A
+              </div>
+            </z-select-item>
+          </z-select>
+        </div>
+      </div>
+      <!-- fin barra de busqueda -->
+
+      <!-- panel de filtros -->
+      @if (isOpenFilter()) {
+        <div class="bg-card border rounded-lg p-6 mb-8 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-medium">Filtros avanzados</h3>
+            <button
+              z-button
+              zType="ghost"
+              zSize="sm"
+              class="h-10 cursor-pointer"
+              (click)="clearFilters()">
+              <ng-icon name="lucideX" class="mr-2 h-4 w-4" />
+              Limpiar filtros
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- filtros por categorias -->
+            <div>
+              <h4 class="font-medium mb-3">Categoría</h4>
+              <div class="flex flex-wrap gap-2">
+                @for (cat of categories; track cat.id) {
+                  <button
+                    z-button
+                    [id]="cat.id"
+                    [zType]="categoryFilter() === cat.id ? 'default' : 'outline'"
+                    zSize="sm"
+                    class="h-10 cursor-pointer mb-1"
+                    (click)="categoryFilter.set(cat.id)">
+                    {{ cat.name }}
+                  </button>
+                }
+              </div>
+            </div>
+            <!-- fin filtros por categorias -->
+
+            <!-- filtros por visibilidad -->
+            <div>
+              <h4 class="font-medium mb-3">Visibilidad</h4>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  z-button
+                  id="all"
+                  [zType]="visibilityFilter() === 'all' ? 'default' : 'outline'"
+                  zSize="sm"
+                  class="h-10 cursor-pointer mb-1"
+                  (click)="visibilityFilter.set('all')">
+                  Todos
+                </button>
+                <button
+                  z-button
+                  id="public"
+                  [zType]="visibilityFilter() === 'public' ? 'default' : 'outline'"
+                  zSize="sm"
+                  class="h-10 cursor-pointer mb-1"
+                  (click)="visibilityFilter.set('public')">
+                  Públicos
+                </button>
+                <button
+                  z-button
+                  id="private"
+                  [zType]="visibilityFilter() === 'private' ? 'default' : 'outline'"
+                  zSize="sm"
+                  class="h-10 cursor-pointer mb-1"
+                  (click)="visibilityFilter.set('private')">
+                  Privados
+                </button>
+              </div>
+            </div>
+            <!-- fin filtros por visibilidad -->
+
+            <!-- filtros por tecnologia -->
+            <div>
+              <h4 class="font-medium mb-3">Tecnologías</h4>
+              <app-accordion value="technologies">
+                <!-- Trigger proyectado: título + badge condicional -->
+                <span accordionTrigger class="flex items-center underline-none">
+                  Seleccionar tecnologías
+                  @if (techFilters().length > 0) {
+                    <z-badge zType="secondary" class="ml-2">
+                      {{ techFilters().length }}
+                    </z-badge>
+                  }
+                </span>
+
+                <!-- Contenido del acordeón -->
+                <div class="grid grid-cols-2 gap-2 mt-2 max-h-40 overflow-y-auto pr-2">
+                  @for (tech of allTechnologies; track tech) {
+                    <div class="flex items-center space-x-2">
+                      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+                      <label class="flex items-start gap-2 cursor-pointer">
+                        <app-checkbox
+                          [checked]="techFilters().includes(tech)"
+                          (checkedChange)="handleTechFilterChange(tech)" />
+                        <span class="text-sm font-medium leading-none select-none">
+                          {{ tech }}
+                        </span>
+                      </label>
+                    </div>
+                  }
+                </div>
+              </app-accordion>
+            </div>
+            <!-- fin filtros por tecnologia -->
+          </div>
+        </div>
+      }
+      <!-- fin panel filtros -->
+
+      <div class="mb-4">
+        <p class="text-muted-foreground">
+          {{ paginationLabel() }}
+        </p>
+      </div>
+
+      @if (filteredProjects().length > 0) {
+        <div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (project of currentProjects(); track project.id; let i = $index) {
+              <f-card [cId]="project.id.toString()" cClass="overflow-hidden flex flex-col h-full">
+                <div class="relative h-48 overflow-hidden">
+                  <img
+                    [ngSrc]="project.image || '/img/placeholder.svg'"
+                    [alt]="project.title"
+                    width="600"
+                    height="400"
+                    class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+
+                  @if (project.private) {
+                    <div class="absolute top-3 right-3">
+                      <z-badge
+                        zType="secondary"
+                        zShape="pill"
+                        class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
+                        <ng-icon name="lucideLock" class="h-3 w-3" />
+                        Privado
+                      </z-badge>
+                    </div>
+                  }
+                </div>
+
+                <f-card-content
+                  cClass="p-6 flex flex-col flex-grow"
+                  [cId]="'project' + project.id + '-card'">
+                  <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+                  <p class="text-muted-foreground mb-4">{{ project.description }}</p>
+
+                  <div class="flex flex-wrap gap-2 mb-6">
+                    @for (tag of project.tags; track tag) {
+                      <z-badge zType="secondary" zShape="pill">
+                        {{ tag }}
+                      </z-badge>
+                    }
+                  </div>
+
+                  <div class="flex flex-wrap justify-between gap-2 mt-auto">
+                    <div class="flex gap-2">
+                      @if (!project.private) {
+                        <a
+                          z-button
+                          zType="outline"
+                          zSize="sm"
+                          [href]="project.github"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="h-9 flex items-center group">
+                          <ng-icon
+                            name="lucideGithub"
+                            class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
+                          Código
+                        </a>
+                      }
+                      <a
+                        z-button
+                        zType="outline"
+                        zSize="sm"
+                        [href]="project.demo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="h-9 flex items-center group">
+                        <ng-icon
+                          name="lucideExternalLink"
+                          class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                        Demo
+                      </a>
+                    </div>
+                    <a
+                      z-button
+                      zType="default"
+                      zSize="sm"
+                      [routerLink]="'/proyecto/' + project.slug"
+                      rel="noopener noreferrer"
+                      class="h-9 flex items-center group">
+                      <ng-icon
+                        name="lucideArrowRight"
+                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      Ver Detalles
+                    </a>
+                  </div>
+                </f-card-content>
+              </f-card>
+            }
+          </div>
+
+          <!-- paginación -->
+          @if (totalPages() > 1) {
+            <div class="flex justify-center mt-12">
+              <nav class="flex items-center gap-1">
+                <button
+                  z-button
+                  zSize="icon"
+                  class="h-10 cursor-pointer text-muted-foreground"
+                  zType="outline"
+                  (click)="goToPreviousPage()"
+                  [zDisabled]="currentPage() === 1">
+                  <ng-icon name="lucideChevronLeft" class="h-4 w-4" />
+                </button>
+
+                <div class="flex items-center">
+                  @for (pageNumber of pageNumbers(); track pageNumber; let i = $index) {
+                    @if (typeof pageNumber === 'number') {
+                      <button
+                        z-button
+                        zSize="icon"
+                        class="cursor-pointer h-10 w-10 mx-1"
+                        [zType]="currentPage() === pageNumber ? 'default' : 'outline'"
+                        (click)="paginate(pageNumber)">
+                        {{ pageNumber }}
+                      </button>
+                    } @else {
+                      <span [id]="i" class="mx-1 text-muted-foreground">
+                        {{ pageNumber }}
+                      </span>
+                    }
+                  }
+                </div>
+
+                <button
+                  z-button
+                  zSize="icon"
+                  class="h-10 cursor-pointer text-muted-foreground"
+                  zType="outline"
+                  (click)="goToNextPage()"
+                  [zDisabled]="currentPage() === totalPages()">
+                  <ng-icon name="lucideChevronRight" class="h-4 w-4" />
+                </button>
+              </nav>
+            </div>
+          }
+          <!-- fin paginación -->
+        </div>
+      } @else {
+        <div class="text-center py-12">
+          <p class="text-lg text-muted-foreground mb-4">
+            No se encontraron proyectos con los filtros seleccionados.
+          </p>
+          <button z-button (click)="clearFilters()" class="cursor-pointer">Limpiar filtros</button>
+        </div>
+      }
+    </div>
+  </section>
+</main>
+<app-footer />
