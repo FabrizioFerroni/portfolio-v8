@@ -1,5 +1,12 @@
 import { Routes } from '@angular/router';
-import { Home, PoliticaPrivacidad, Proyecto, Proyectos, TerminosCondiciones } from './feature';
+import {
+  Home,
+  Mantenimiento,
+  PoliticaPrivacidad,
+  Proyecto,
+  Proyectos,
+  TerminosCondiciones,
+} from './feature';
 import { NotFound } from './shared/components/fabriziodev';
 import { Rutas } from './shared/utils';
 
@@ -24,6 +31,10 @@ export const routes: Routes = [
   {
     path: `${Rutas.PROYECTO}/:slug`,
     component: Proyecto,
+  },
+  {
+    path: Rutas.MANTENIMIENTO,
+    component: Mantenimiento,
   },
   {
     path: Rutas.NOT_FOUND,

@@ -1,0 +1,96 @@
+<div class="min-h-screen flex flex-col bg-background select-none">
+  <div class="absolute top-6 left-6">
+    <a routerLink="/" class="text-xl font-bold">
+      <span class="text-primary">FabrizioDev</span> Portfolio.
+    </a>
+  </div>
+
+  <main class="flex-grow flex items-center justify-center py-20 px-4">
+    <div class="max-w-2xl w-full mx-auto text-center">
+      <div class="anim-fade-scale-in mb-8 flex justify-center">
+        <div class="relative">
+          <div class="w-28 h-28 rounded-full bg-primary/10 flex items-center justify-center">
+            <span class="anim-wobble">
+              <ng-icon name="lucideWrench" class="text-primary" size="56" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="anim-fade-slide-up-1">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-balance">Estamos en mantenimiento</h1>
+        <p class="text-xl text-muted-foreground mb-2 text-pretty">
+          Estoy puliendo algunos detalles para mejorar tu experiencia.
+        </p>
+        <p class="text-lg text-muted-foreground mb-8 text-pretty">
+          El portfolio volverá a estar disponible muy pronto. ¡Gracias por tu paciencia! 🛠️
+        </p>
+      </div>
+
+      <div
+        class="anim-fade-slide-up-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 mb-10">
+        <ng-icon name="lucideClock" class="text-primary" size="16" />
+        <span class="text-sm font-medium text-primary">Trabajos en curso</span>
+      </div>
+
+      <div class="anim-fade-slide-up-3 max-w-md mx-auto mb-10">
+        @if (!subscribed()) {
+          <p class="text-sm text-muted-foreground mb-4 flex items-center justify-center gap-2">
+            <ng-icon name="lucideBell" size="16" />
+            Avísame cuando el sitio esté de vuelta
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              [value]="email()"
+              (input)="email.set($any($event.target).value)"
+              placeholder="tu@email.com"
+              required
+              class="flex-grow px-4 py-2 rounded-lg border focus:border-primary border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <button (click)="handleSubscribe($event)" class="h-10 cursor-pointer" z-button>
+              Notificarme
+            </button>
+          </div>
+        } @else {
+          <div class="anim-subscribed p-4 bg-primary/10 rounded-lg">
+            <p class="text-primary font-medium">
+              ¡Listo! Te avisaré cuando vuelva a estar online. 🚀
+            </p>
+          </div>
+        }
+      </div>
+
+      <div class="anim-fade-in">
+        <p class="text-sm text-muted-foreground mb-4">Mientras tanto, puedes encontrarme en:</p>
+        <div class="flex items-center justify-center gap-4">
+          <a
+            href="https://github.com/FabrizioFerroni"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            class="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+            <ng-icon name="lucideGithub" size="20" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/fabrizio-ferroni/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            class="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+            <ng-icon name="lucideLinkedin" size="20" />
+          </a>
+          <a
+            href="mailto:contacto@fabriziodev.com"
+            aria-label="Email"
+            class="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+            <ng-icon name="lucideMail" size="20" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="text-center py-6 text-sm text-muted-foreground">
+    <p>© 2026 - {{ currentYear }} Fabrizio. Todos los derechos reservados.</p>
+  </div>
+</div>

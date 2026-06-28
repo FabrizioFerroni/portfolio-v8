@@ -5,4 +5,5 @@ export enum Rutas {
   TERMINOS_CONDICIONES = 'terminos-servicio',
   PROYECTOS = 'proyectos',
   PROYECTO = 'proyecto',
+  MANTENIMIENTO = 'mantenimiento',
 }
