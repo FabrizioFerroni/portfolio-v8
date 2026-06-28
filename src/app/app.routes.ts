@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {
+/* import {
   Home,
   Mantenimiento,
   PoliticaPrivacidad,
@@ -7,38 +7,46 @@ import {
   Proyectos,
   TerminosCondiciones,
 } from './feature';
-import { NotFound } from './shared/components/fabriziodev';
+import { NotFound } from './shared/components/fabriziodev'; */
 import { Rutas } from './shared/utils';
+import { maintenanceGuard } from './core';
 
 export const routes: Routes = [
   {
     path: Rutas.HOME,
     pathMatch: 'full',
-    component: Home,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.Home),
   },
   {
     path: Rutas.POLITICA_PRIVACIDAD,
-    component: PoliticaPrivacidad,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.PoliticaPrivacidad),
   },
   {
     path: Rutas.TERMINOS_CONDICIONES,
-    component: TerminosCondiciones,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.TerminosCondiciones),
   },
   {
     path: Rutas.PROYECTOS,
-    component: Proyectos,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.Proyectos),
   },
   {
     path: `${Rutas.PROYECTO}/:slug`,
-    component: Proyecto,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.Proyecto),
   },
   {
     path: Rutas.MANTENIMIENTO,
-    component: Mantenimiento,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./feature').then(m => m.Mantenimiento),
   },
   {
     path: Rutas.NOT_FOUND,
-    component: NotFound,
+    canActivate: [maintenanceGuard],
+    loadComponent: () => import('./shared/components/fabriziodev').then(m => m.NotFound),
     pathMatch: 'full',
   },
 ];
