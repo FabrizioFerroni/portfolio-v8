@@ -28,6 +28,7 @@ import {
   TabsTriggerComponent,
 } from '@/shared/components/fabriziodev';
 import { ZardSelectImports } from '@/shared/components/select';
+import { SeoService } from '@/core';
 
 @Component({
   selector: 'app-proyecto',
@@ -310,7 +311,7 @@ export class Proyecto {
   //fin borrar dsp
   //#region Dependencias
   private readonly router = inject(Router);
-
+  private readonly seo = inject(SeoService);
   //#endregion
 
   //#region Variables
@@ -330,6 +331,25 @@ export class Proyecto {
       const currentSlug = this.slug();
       this.project = this.projects.find(p => p.slug === currentSlug)!;
       this.relatedProjects = this.getRelatedProjects();
+
+      if (this.project) {
+        this.seo.updateSeoTags({
+          title: this.project.title,
+          description: this.project.description,
+          image: this.project.image,
+          type: 'proyect',
+          locale: 'es_AR',
+        });
+        this.seo.setIndexFollow(true);
+      } else {
+        this.seo.updateSeoTags({
+          title: 'Proyecto no encontrado',
+          description: 'El proyecto buscado no fue encontrado, pruebe con otro metodo de busqueda',
+          type: 'proyect',
+        });
+
+        this.seo.setIndexFollow(false);
+      }
     });
   }
   //#endregion

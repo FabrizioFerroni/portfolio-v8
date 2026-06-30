@@ -1,5 +1,6 @@
+import { SeoService } from '@/core';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -30,9 +31,19 @@ import {
   ],
 })
 export class Mantenimiento {
+  private readonly seo = inject(SeoService);
   currentYear: number = new Date().getFullYear();
   email = signal('');
   subscribed = signal(false);
+
+  constructor() {
+    this.seo.updateSeoTags({
+      title: 'Pagina en mantenimiento',
+      description: 'El portfolio web se encuentra en mantenimiento',
+    });
+
+    this.seo.setIndexFollow(false);
+  }
 
   handleSubscribe(event: Event) {
     event.preventDefault();

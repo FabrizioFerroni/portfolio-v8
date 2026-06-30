@@ -21,6 +21,7 @@ import { Component, signal, computed, inject, PLATFORM_ID } from '@angular/core'
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Accordion, Card, CardContent, Checkbox } from '@/shared/components/fabriziodev';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '@/core';
 
 const PROJECTS_PER_PAGE = 9;
 
@@ -68,6 +69,7 @@ function isSortBy(value: string): value is SortBy {
   ],
 })
 export class Proyectos {
+  private readonly seo = inject(SeoService);
   isOpenFilter = signal<boolean>(false);
   projectsLoaded = signal<boolean>(false);
 
@@ -78,6 +80,15 @@ export class Proyectos {
   readonly sortBy = signal<SortBy>('date-desc');
   readonly currentPage = signal(1);
   private platformId = inject(PLATFORM_ID);
+
+  constructor() {
+    this.seo.updateSeoTags({
+      title: 'Proyectos',
+      description:
+        'Página donde se demuestran todos los proyectos que he hecho a lo largo de mi experiencia',
+    });
+    this.seo.setIndexFollow(true);
+  }
 
   allProjects = signal([
     {
