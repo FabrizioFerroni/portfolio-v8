@@ -14,6 +14,10 @@ export const loaderInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 
+  if (req.method !== 'GET') {
+    return next(req);
+  }
+
   const loader = inject(LoaderService);
 
   loader.show();

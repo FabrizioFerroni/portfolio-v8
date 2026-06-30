@@ -3,7 +3,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { Card, CardContent } from '@/shared/components/fabriziodev';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardInputDirective } from '@/shared/components/input';
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -13,6 +13,15 @@ import {
   lucideMapPin,
   lucideSend,
 } from '@ng-icons/lucide';
+import { SendContact, SendForm } from './interfaces';
+import { Store } from '@ngrx/store';
+import {
+  ContactoAction,
+  errorContact,
+  messageContact,
+  sendingContact,
+  statusCodeContact,
+} from './store';
 
 @Component({
   selector: 'app-contacto',
@@ -33,11 +42,19 @@ import {
   ],
 })
 export class Contacto {
-  isSubbmiting = signal<boolean>(false);
+  //#region Inyecciones
+  private readonly store = inject(Store);
+  private readonly destroyRef = inject(DestroyRef);
+  //#endregion
+
+  //#region Variables
   status = signal<'iddle' | 'success' | 'error' | null>('iddle');
   messageStatus = signal<string>('');
+  private dismissTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  //#endregion
 
-  form: FormGroup = new FormGroup({
+  //#region formulario
+  form: FormGroup<SendForm> = new FormGroup<SendForm>({
     name: new FormControl('', { nonNullable: true, validators: Validators.required }),
     email: new FormControl('', {
       nonNullable: true,
@@ -46,7 +63,22 @@ export class Contacto {
     subject: new FormControl('', { nonNullable: true, validators: Validators.required }),
     message: new FormControl('', { nonNullable: true, validators: Validators.required }),
   });
+  //#endregion
 
+  //#region Store
+  readonly isLoading = this.store.selectSignal(sendingContact);
+  private readonly errorBack = this.store.selectSignal(errorContact);
+  private readonly messageBack = this.store.selectSignal(messageContact);
+  private readonly statusCodeBack = this.store.selectSignal(statusCodeContact);
+  //#endregion
+
+  //#region inicializacion
+  constructor() {
+    this.handleResponse();
+  }
+  //#endregion
+
+  //#region Getter validators
   get nameControl() {
     return this.form.get('name')!;
   }
@@ -96,43 +128,50 @@ export class Contacto {
 
     return '';
   }
+  //#endregion
 
+  //#region funciones
   handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.isSubbmiting.set(true);
 
-    const rawValue = this.form.getRawValue();
-
-    if (
-      rawValue['name'] === 'Fabrizio Ferroni' &&
-      rawValue['email'] === 'fabrizioferroni@outlook.com' &&
-      rawValue['subject'] === 'Test' &&
-      rawValue['message'] === 'Test form'
-    ) {
-      this.status.set('success');
-      this.messageStatus.set(
-        `Tu mensaje ha sido enviado correctamente. Me pondré en contacto contigo lo antes posible.`
-      );
-    } else {
-      this.status.set('error');
-      this.messageStatus.set(`Hubo un error al enviar el correo, por favor intente mas tarde!`);
-    }
-    console.log(rawValue);
-    setTimeout(() => {
-      this.isSubbmiting.set(false);
-    }, 2500);
-
-    setTimeout(() => {
-      this.resetForm();
-    }, 5000);
-  }
-
-  resetForm() {
-    this.form.reset();
+    const data: SendContact = this.form.getRawValue();
     this.status.set(null);
     this.messageStatus.set('');
+    this.store.dispatch(ContactoAction.sendContact({ data }));
   }
+
+  private handleResponse(): void {
+    effect(() => {
+      const statusCode = this.statusCodeBack();
+      if (statusCode === null) return;
+
+      if (statusCode >= 200 && statusCode < 300) {
+        this.status.set('success');
+        this.messageStatus.set(this.messageBack() ?? '');
+        this.form.reset();
+      } else {
+        this.status.set('error');
+        this.messageStatus.set(this.errorBack() ?? 'Ocurrió un error inesperado');
+      }
+
+      this.scheduleDismiss();
+    });
+
+    this.destroyRef.onDestroy(() => {
+      if (this.dismissTimeoutId) clearTimeout(this.dismissTimeoutId);
+    });
+  }
+
+  private scheduleDismiss(durationMs = 5000): void {
+    if (this.dismissTimeoutId) clearTimeout(this.dismissTimeoutId);
+
+    this.dismissTimeoutId = setTimeout(() => {
+      this.status.set(null);
+      this.messageStatus.set('');
+    }, durationMs);
+  }
+  //#endregion
 }
