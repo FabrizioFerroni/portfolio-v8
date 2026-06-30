@@ -66,7 +66,7 @@ export class SeoService {
 
     const fullUrl = `${origin}${this.router.url}`;
 
-    //this.setCanonicalUrl(fullUrl);
+    this.setCanonicalUrl(fullUrl);
 
     const imageUrl = seoData.image || this.defaultImage;
 
