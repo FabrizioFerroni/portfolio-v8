@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   Habilidades,
   Hero,
@@ -10,6 +10,7 @@ import {
   Contacto,
 } from '../components';
 import { Footer } from '@/layout';
+import { SeoService } from '@/core';
 
 @Component({
   selector: 'app-home',
@@ -27,4 +28,15 @@ import { Footer } from '@/layout';
   templateUrl: './page.html',
   styleUrl: './page.css',
 })
-export class Home {}
+export class Home {
+  private readonly seo = inject(SeoService);
+
+  constructor() {
+    this.seo.updateSeoTags({
+      title: '',
+      description:
+        'Pagina principal del portfolio donde se demuestran mis habilidades, proyectos, y experiencias ademas de una breve reseña hacia mi persona.',
+    });
+    this.seo.setIndexFollow(true);
+  }
+}

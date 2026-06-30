@@ -18,6 +18,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideSettings, lucideX } from '@ng-icons/lucide';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { SeoService } from '@/core';
 
 interface NavLinks {
   name: string;
@@ -32,6 +33,7 @@ interface NavLinks {
   viewProviders: [provideIcons({ lucideSettings, lucideMenu, lucideX })],
 })
 export class Navbar implements OnInit, OnDestroy {
+  private readonly seo = inject(SeoService);
   private platformId = inject(PLATFORM_ID);
   private sheetService = inject(ZardSheetService);
   activeFragment = signal<string>('');
@@ -89,6 +91,10 @@ export class Navbar implements OnInit, OnDestroy {
     });
   }
 
+  private getNameByFragment(fragment: string): string {
+    return this.navLinks.find(l => l.fragment === fragment)?.name ?? '';
+  }
+
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.handleScroll();
@@ -117,6 +123,11 @@ export class Navbar implements OnInit, OnDestroy {
       for (const entry of entries) {
         if (entry.isIntersecting) {
           this.activeFragment.set(entry.target.id);
+          this.seo.updateSeoTags({
+            title: this.getNameByFragment(entry.target.id),
+            description:
+              'Pagina principal del portfolio donde se demuestran mis habilidades, proyectos, y experiencias ademas de una breve reseña hacia mi persona.',
+          });
         }
       }
     }, options);
