@@ -150,8 +150,8 @@
           <button
             z-button
             class="w-full cursor-pointer flex justify-center items-center"
-            [zDisabled]="isSubbmiting() || form.invalid">
-            @if (isSubbmiting()) {
+            [zDisabled]="isLoading() || form.invalid">
+            @if (isLoading()) {
               <span class="flex items-center">
                 <svg
                   class="animate-spin -ml-1 mr-2 h-4 w-4"

@@ -1,6 +1,7 @@
 import {
   ApplicationConfig,
   inject,
+  isDevMode,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
@@ -9,8 +10,16 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideZard } from '@/shared/core/provider/providezard';
 import { ReactiveFormsModule } from '@angular/forms';
-import { apiKeyInterceptor, loaderInterceptor, SettingsService } from './core';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  apiKeyInterceptor,
+  errorHandlerInterceptor,
+  loaderInterceptor,
+  SettingsService,
+} from './core';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideStore } from '@ngrx/store';
+import { contactConfig } from './feature/home/components';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,10 +35,23 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideZard(),
     ReactiveFormsModule,
-    provideHttpClient(withInterceptors([apiKeyInterceptor, loaderInterceptor])),
+    provideHttpClient(
+      withInterceptors([apiKeyInterceptor, errorHandlerInterceptor, loaderInterceptor]),
+      withFetch()
+    ),
     provideAppInitializer(async () => {
       const settings = inject(SettingsService);
       await settings.loadSettings();
     }),
+    provideStore({}),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: true,
+      traceLimit: 75,
+      connectInZone: true,
+    }),
+    ...contactConfig,
   ],
 };
