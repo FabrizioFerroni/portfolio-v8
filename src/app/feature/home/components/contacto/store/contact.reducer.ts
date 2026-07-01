@@ -1,8 +1,8 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { ContactState } from '../interfaces';
 import { ContactoAction } from './contact.action';
+import { GenericState } from '@/shared/interfaces';
 
-const initialState: ContactState = {
+const initialState: GenericState = {
   isLoading: false,
   error: null,
   message: null,

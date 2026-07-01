@@ -19,7 +19,7 @@ import {
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideStore } from '@ngrx/store';
-import { contactConfig } from './feature/home/components';
+import { contactConfig, newsletterConfig } from './feature/home/components';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -53,5 +53,6 @@ export const appConfig: ApplicationConfig = {
       connectInZone: true,
     }),
     ...contactConfig,
+    ...newsletterConfig,
   ],
 };
