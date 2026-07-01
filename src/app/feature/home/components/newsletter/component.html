@@ -27,7 +27,7 @@
                   formControlName="name"
                   [zStatus]="nameControl!.invalid && nameControl!.touched ? 'error' : undefined"
                   type="text"
-                  class="outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+                  class="h-10 outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
               </z-form-control>
               <z-form-message zType="error">{{ getNameError() }}</z-form-message>
             </z-form-field>
@@ -43,15 +43,15 @@
                   zRequired
                   formControlName="email"
                   [zStatus]="emailControl!.invalid && emailControl!.touched ? 'error' : undefined"
-                  class="outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+                  class="h-10 outFocus file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
               </z-form-control>
               <z-form-message zType="error">{{ getEmailError() }}</z-form-message>
             </z-form-field>
           </div>
         </div>
         <!-- buton -->
-        <button z-button class="cursor-pointer h-12 px-6" [zDisabled]="isSubmitting()">
-          @if (isSubmitting()) {
+        <button z-button class="h-10 cursor-pointer h-12 px-6" [zDisabled]="isLoading()">
+          @if (isLoading()) {
             <svg
               class="animate-spin -ml-1 mr-2 h-4 w-4"
               xmlns="http://www.w3.org/2000/svg"

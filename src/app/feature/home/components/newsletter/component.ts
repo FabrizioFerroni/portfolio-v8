@@ -2,10 +2,19 @@ import { ZardAlertComponent } from '@/shared/components/alert';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardInputDirective } from '@/shared/components/input';
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideMail } from '@ng-icons/lucide';
+import { Store } from '@ngrx/store';
+import { SendForm, SendNewsletter } from './interface';
+import {
+  errorNewsletter,
+  messageNewsletter,
+  NewsletterAction,
+  sendingNewsletter,
+  statusCodeNewsletter,
+} from './store';
 
 @Component({
   selector: 'app-newsletter',
@@ -22,18 +31,41 @@ import { lucideCircleCheck, lucideMail } from '@ng-icons/lucide';
   viewProviders: [provideIcons({ lucideMail, lucideCircleCheck })],
 })
 export class Newsletter {
-  isSubmitting = signal<boolean>(false);
+  //#region Inyecciones
+  private readonly store = inject(Store);
+  private readonly destroyRef = inject(DestroyRef);
+  //#endregion
+
+  //#region Variables
   status = signal<'iddle' | 'success' | 'error' | null>('iddle');
   messageStatus = signal<string>('');
+  private dismissTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  //#endregion
 
-  form: FormGroup = new FormGroup({
+  //#region formulario
+  form: FormGroup<SendForm> = new FormGroup<SendForm>({
     name: new FormControl('', { nonNullable: true, validators: Validators.required }),
     email: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.email],
     }),
   });
+  //#endregion
 
+  //#region Store
+  readonly isLoading = this.store.selectSignal(sendingNewsletter);
+  private readonly errorBack = this.store.selectSignal(errorNewsletter);
+  private readonly messageBack = this.store.selectSignal(messageNewsletter);
+  private readonly statusCodeBack = this.store.selectSignal(statusCodeNewsletter);
+  //#endregion
+
+  //#region inicializacion
+  constructor() {
+    this.handleResponse();
+  }
+  //#endregion
+
+  //#region Getter validators
   get nameControl() {
     return this.form.get('name')!;
   }
@@ -59,41 +91,57 @@ export class Newsletter {
 
     return '';
   }
+  //#endregion
 
+  //#region Funciones
   handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.isSubmitting.set(true);
 
     const rawValue = this.form.getRawValue();
 
-    if (
-      rawValue['name'] === 'Fabrizio Ferroni' &&
-      rawValue['email'] === 'fabrizioferroni@outlook.com'
-    ) {
-      this.status.set('success');
-      this.messageStatus.set(
-        `Gracias por suscribirte, ${rawValue['name']}. Pronto recibirás un email de confirmación.`
-      );
-    } else {
-      this.status.set('error');
-      this.messageStatus.set(`Hubo un error al subscribirte`);
-    }
-    console.log(rawValue);
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-    }, 2500);
+    const data: SendNewsletter = {
+      name: rawValue.name,
+      email: rawValue.email,
+      source: 'portfolio',
+    };
 
-    setTimeout(() => {
-      this.resetForm();
-    }, 5000);
-  }
-
-  resetForm() {
-    this.form.reset();
     this.status.set(null);
     this.messageStatus.set('');
+    this.store.dispatch(NewsletterAction.sendSubscriber({ data }));
   }
+
+  private handleResponse(): void {
+    effect(() => {
+      const statusCode = this.statusCodeBack();
+      if (statusCode === null) return;
+
+      if (statusCode >= 200 && statusCode < 300) {
+        this.status.set('success');
+        this.messageStatus.set(this.messageBack() ?? '');
+        this.form.reset();
+      } else {
+        this.status.set('error');
+        this.messageStatus.set(this.errorBack() ?? 'Ocurrió un error inesperado');
+      }
+
+      this.scheduleDismiss();
+    });
+
+    this.destroyRef.onDestroy(() => {
+      if (this.dismissTimeoutId) clearTimeout(this.dismissTimeoutId);
+    });
+  }
+
+  private scheduleDismiss(durationMs = 5000): void {
+    if (this.dismissTimeoutId) clearTimeout(this.dismissTimeoutId);
+
+    this.dismissTimeoutId = setTimeout(() => {
+      this.status.set(null);
+      this.messageStatus.set('');
+    }, durationMs);
+  }
+  //#endregion
 }
