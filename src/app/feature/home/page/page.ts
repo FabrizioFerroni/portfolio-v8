@@ -6,7 +6,7 @@ import {
   SobreMi,
   Experiencias,
   Newsletter,
-  Testimonials,
+  // Testimonials,
   Contacto,
 } from '../components';
 import { Footer } from '@/layout';
@@ -21,7 +21,7 @@ import { SeoService } from '@/core';
     ProyectosHome,
     Experiencias,
     Newsletter,
-    Testimonials,
+    //Testimonials,
     Contacto,
     Footer,
   ],
