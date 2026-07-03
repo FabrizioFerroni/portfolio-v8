@@ -10,14 +10,15 @@
 
     <div class="max-w-4xl mx-auto">
       <div class="relative border-l border-muted-foreground/20 pl-6 ml-6">
-        @for (exp of experiences; track exp.id) {
+        @for (exp of experiencesList(); track exp.id) {
           <div [id]="exp.id" class="mb-12">
             <div
               class="absolute w-4 h-4 bg-primary rounded-full -left-2 mt-1.5 border-4 border-background"></div>
+
             <f-card cId="experience-{{ exp.id }}">
               <f-card-header cClass="pb-2">
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                  <f-card-title>{{ exp.role }}</f-card-title>
+                  <f-card-title>{{ exp.position }}</f-card-title>
                   <z-badge zType="outline">
                     {{ exp.period }}
                   </z-badge>
@@ -27,15 +28,17 @@
               <f-card-content>
                 <p class="mb-4 text-muted-foreground">{{ exp.description }}</p>
 
-                <h4 class="font-semibold mb-2">Logros claves:</h4>
-                <ul class="list-disc pl-5 mb-4 space-y-1 text-muted-foreground">
-                  @for (achievement of exp.achievements; track achievement; let i = $index) {
-                    <li [id]="i">{{ achievement }}</li>
-                  }
-                </ul>
+                @if (exp.achievements.length > 0) {
+                  <h4 class="font-semibold mb-2">Logros claves:</h4>
+                  <ul class="list-disc pl-5 mb-4 space-y-1 text-muted-foreground">
+                    @for (achievement of exp.achievements; track achievement; let i = $index) {
+                      <li [id]="i">{{ achievement }}</li>
+                    }
+                  </ul>
+                }
 
                 <div class="flex flex-wrap gap-2 mt-4">
-                  @for (tech of exp.technologies; track tech) {
+                  @for (tech of exp.skills; track tech) {
                     <z-badge zType="secondary">
                       {{ tech }}
                     </z-badge>
