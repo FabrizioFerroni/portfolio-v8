@@ -20,6 +20,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideStore } from '@ngrx/store';
 import { contactConfig, experienceConfig, newsletterConfig } from './feature/home/components';
+import { proyectosConfig } from './data-access';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -55,5 +56,6 @@ export const appConfig: ApplicationConfig = {
     ...contactConfig,
     ...newsletterConfig,
     ...experienceConfig,
+    ...proyectosConfig,
   ],
 };

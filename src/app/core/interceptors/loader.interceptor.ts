@@ -18,6 +18,12 @@ export const loaderInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 
+  const excludedExactPaths = ['/api/projects', '/api/projects/home'];
+
+  if (excludedExactPaths.includes(new URL(req.url, 'http://localhost').pathname)) {
+    return next(req);
+  }
+
   const loader = inject(LoaderService);
 
   loader.show();
