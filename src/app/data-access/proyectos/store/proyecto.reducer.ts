@@ -1,0 +1,161 @@
+import { createFeature, createReducer, on } from '@ngrx/store';
+import { ProjectState } from '../interfaces';
+import { ProyectoActions } from './proyecto.action';
+
+const initialState: ProjectState = {
+  projects: [],
+  projectsHome: [],
+  project: null,
+  meta: null,
+  isLoading: false,
+  error: null,
+  statusCode: null,
+  //TODO: Images states
+  imagesProject: null,
+  imageLoadingProject: false,
+  imageErrorProject: null,
+  imageStatusCodeProject: null,
+};
+
+export const projectFeature = createFeature({
+  name: 'proyectos',
+  reducer: createReducer(
+    initialState,
+    on(ProyectoActions.getProyectos, state => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: true,
+      error: null,
+      statusCode: null,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectosSuccess, (state, { data }) => ({
+      ...state,
+      projects: data.projects,
+      projectsHome: [],
+      project: null,
+      meta: data.meta,
+      isLoading: false,
+      error: null,
+      statusCode: 200,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectosFailed, (state, { error, statusCode }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error,
+      statusCode,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    //Home:
+    on(ProyectoActions.getProyectosHome, state => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: true,
+      error: null,
+      statusCode: null,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectosHomeSuccess, (state, { data }) => ({
+      ...state,
+      projects: [],
+      projectsHome: data,
+      project: null,
+      meta: null,
+      isLoading: false,
+      error: null,
+      statusCode: 200,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectosHomeFailed, (state, { error, statusCode }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error,
+      statusCode,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    //BySlug
+    on(ProyectoActions.getProyectoBySlug, state => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: true,
+      error: null,
+      statusCode: null,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectoBySlugSuccess, (state, { data }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: data,
+      meta: null,
+      isLoading: false,
+      error: null,
+      statusCode: 200,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getProyectoBySlugFailed, (state, { error, statusCode }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error,
+      statusCode,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    }))
+  ),
+});

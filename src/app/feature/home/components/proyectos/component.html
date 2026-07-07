@@ -22,93 +22,129 @@
       }
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      @for (project of filteredProjects(); track project.id) {
-        <f-card cId="project-{{ project.id }}" cClass="overflow-hidden flex flex-col h-full">
-          <div class="relative h-48 overflow-hidden">
-            <img
-              [ngSrc]="project.image || '/img/placeholder.svg'"
-              [alt]="project.title"
-              width="600"
-              height="400"
-              class="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
-              priority />
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (i of skeletonItems; track i) {
+          <f-card cClass="overflow-hidden flex flex-col h-full">
+            <div class="relative h-48 overflow-hidden">
+              <z-skeleton class="w-full h-full rounded-none" />
+            </div>
 
-            @if (project.private) {
-              <div class="absolute top-3 right-3">
-                <z-badge
-                  zType="secondary"
-                  zShape="pill"
-                  class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
-                  <ng-icon name="lucideLock" class="h-3 w-3" />
-                  Privado
-                </z-badge>
+            <f-card-content cClass="p-6 flex flex-col flex-grow">
+              <z-skeleton class="h-6 w-3/4 mb-3 rounded-md" />
+
+              <div class="space-y-2 mb-4">
+                <z-skeleton class="h-4 w-full rounded-md" />
+                <z-skeleton class="h-4 w-5/6 rounded-md" />
               </div>
-            }
-          </div>
 
-          <f-card-content
-            cClass="p-6 flex flex-col flex-grow"
-            [cId]="'project' + project.id + '-card'">
-            <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
-            <p class="text-muted-foreground mb-4">{{ project.description }}</p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <z-skeleton class="h-6 w-16 rounded-full" />
+                <z-skeleton class="h-6 w-20 rounded-full" />
+                <z-skeleton class="h-6 w-14 rounded-full" />
+              </div>
 
-            <div class="flex flex-wrap gap-2 mb-6">
-              @for (tag of project.tags; track tag) {
-                <z-badge zType="secondary" zShape="pill">
-                  {{ tag }}
-                </z-badge>
+              <div class="flex flex-wrap justify-between gap-2 mt-auto">
+                <div class="flex gap-2">
+                  <z-skeleton class="h-8 w-24 rounded-md" />
+                  <z-skeleton class="h-8 w-20 rounded-md" />
+                </div>
+                <z-skeleton class="h-8 w-28 rounded-md" />
+              </div>
+            </f-card-content>
+          </f-card>
+        }
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (project of projectList(); track project.id) {
+          <f-card cId="project-{{ project.id }}" cClass="overflow-hidden flex flex-col h-full">
+            <div class="relative h-48 overflow-hidden">
+              <img
+                [ngSrc]="project.imageFullUrl || '/img/placeholder.svg'"
+                [alt]="project.title"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+
+              @if (project.visibility === 'private') {
+                <div class="absolute top-3 right-3">
+                  <z-badge
+                    zType="secondary"
+                    zShape="pill"
+                    class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
+                    <ng-icon name="lucideLock" class="h-3 w-3" />
+                    Privado
+                  </z-badge>
+                </div>
               }
             </div>
 
-            <div class="flex flex-wrap justify-between gap-2 mt-auto">
-              <div class="flex gap-2">
-                @if (!project.private) {
+            <f-card-content
+              cClass="p-6 flex flex-col flex-grow"
+              [cId]="'project' + project.id + '-card'">
+              <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+              <p class="text-muted-foreground mb-4 line-clamp-2">
+                {{ project.summary }}
+              </p>
+
+              <div class="flex flex-wrap gap-2 mb-6 flex-grow items-start">
+                @for (tech of project.technologies; track tech.id) {
+                  <z-badge zType="secondary" zShape="pill">
+                    {{ tech.name }}
+                  </z-badge>
+                }
+              </div>
+
+              <div class="flex flex-wrap justify-between gap-2 mt-auto">
+                <div class="flex gap-2">
+                  @if (project.visibility !== 'private') {
+                    <a
+                      z-button
+                      zType="outline"
+                      zSize="sm"
+                      [href]="project.urlGithub"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex items-center group h-9">
+                      <ng-icon
+                        name="lucideGithub"
+                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
+                      Código
+                    </a>
+                  }
                   <a
                     z-button
                     zType="outline"
                     zSize="sm"
-                    [href]="project.github"
+                    [href]="project.urlProyect"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="flex items-center group">
+                    class="flex items-center group h-9">
                     <ng-icon
-                      name="lucideGithub"
-                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-                    Código
+                      name="lucideExternalLink"
+                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    Demo
                   </a>
-                }
+                </div>
                 <a
                   z-button
-                  zType="outline"
+                  zType="default"
                   zSize="sm"
-                  [href]="project.demo"
-                  target="_blank"
+                  [routerLink]="'/proyecto/' + project.slug"
                   rel="noopener noreferrer"
-                  class="flex items-center group">
+                  class="flex items-center group h-9">
                   <ng-icon
-                    name="lucideExternalLink"
-                    class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  Demo
+                    name="lucideArrowRight"
+                    class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  Ver Detalles
                 </a>
               </div>
-              <a
-                z-button
-                zType="default"
-                zSize="sm"
-                [routerLink]="'/proyecto/' + project.slug"
-                rel="noopener noreferrer"
-                class="flex items-center group">
-                <ng-icon
-                  name="lucideArrowRight"
-                  class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                Ver Detalles
-              </a>
-            </div>
-          </f-card-content>
-        </f-card>
-      }
-    </div>
+            </f-card-content>
+          </f-card>
+        }
+      </div>
+    }
 
     <div class="flex justify-center mt-12">
       <a
@@ -117,7 +153,7 @@
         zSize="lg"
         [routerLink]="'/proyectos'"
         rel="noopener noreferrer"
-        class="flex items-center group">
+        class="flex items-center group h-9">
         <ng-icon
           name="lucideGrid"
           class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
