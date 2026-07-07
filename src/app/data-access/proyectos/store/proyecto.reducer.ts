@@ -66,7 +66,6 @@ export const projectFeature = createFeature({
       imageStatusCodeProject: null,
     })),
 
-    //Home:
     on(ProyectoActions.getProyectosHome, state => ({
       ...state,
       projects: [],
@@ -112,7 +111,6 @@ export const projectFeature = createFeature({
       imageStatusCodeProject: null,
     })),
 
-    //BySlug
     on(ProyectoActions.getProyectoBySlug, state => ({
       ...state,
       projects: [],

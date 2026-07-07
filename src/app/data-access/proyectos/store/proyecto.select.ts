@@ -1,6 +1,5 @@
 import { projectFeature } from './proyecto.reducer';
 
-// TODO: Estos selectors son para el get de projects
 export const selectProjects = projectFeature.selectProjects;
 export const selectProjectHome = projectFeature.selectProjectsHome;
 export const selectProject = projectFeature.selectProject;
