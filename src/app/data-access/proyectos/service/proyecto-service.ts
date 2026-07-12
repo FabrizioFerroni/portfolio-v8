@@ -34,4 +34,10 @@ export class ProyectoService extends BaseHttpService {
       observe: 'response',
     });
   }
+
+  obtenerTodasLasTecnologias(): Observable<HttpResponse<ApiResponse<string[]>>> {
+    return this.http.get<ApiResponse<string[]>>(`${this.apiUrl}/project-technologies`, {
+      observe: 'response',
+    });
+  }
 }

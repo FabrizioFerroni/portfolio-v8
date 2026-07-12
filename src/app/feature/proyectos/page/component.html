@@ -134,15 +134,19 @@
         <div class="bg-card border rounded-lg p-6 mb-8 shadow-sm">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-medium">Filtros avanzados</h3>
-            <button
-              z-button
-              zType="ghost"
-              zSize="sm"
-              class="h-10 cursor-pointer"
-              (click)="clearFilters()">
-              <ng-icon name="lucideX" class="mr-2 h-4 w-4" />
-              Limpiar filtros
-            </button>
+            @if (
+              categoryFilter() !== 'all' || visibilityFilter() !== 'all' || techFilters().length > 0
+            ) {
+              <button
+                z-button
+                zType="ghost"
+                zSize="sm"
+                class="h-9 cursor-pointer"
+                (click)="clearFilters()">
+                <ng-icon name="lucideX" class="mr-2 h-4 w-4" />
+                Limpiar filtros
+              </button>
+            }
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -216,7 +220,7 @@
 
                 <!-- Contenido del acordeón -->
                 <div class="grid grid-cols-2 gap-2 mt-2 max-h-40 overflow-y-auto pr-2">
-                  @for (tech of allTechnologies; track tech) {
+                  @for (tech of allTechnologies(); track tech) {
                     <div class="flex items-center space-x-2">
                       <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                       <label class="flex items-start gap-2 cursor-pointer">
@@ -237,157 +241,198 @@
         </div>
       }
       <!-- fin panel filtros -->
+      @if (!isLoading()) {
+        <div class="mb-4">
+          <p class="text-muted-foreground">
+            {{ paginationLabel() }}
+          </p>
+        </div>
+      }
 
-      <div class="mb-4">
-        <p class="text-muted-foreground">
-          {{ paginationLabel() }}
-        </p>
-      </div>
+      @if (isLoading()) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          @for (item of skeletonItems; track $index) {
+            <div class="overflow-hidden flex flex-col h-full rounded-lg border">
+              <!-- imagen -->
+              <div class="relative h-48 overflow-hidden bg-muted animate-pulse"></div>
 
-      @if (filteredProjects().length > 0) {
-        <div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @for (project of currentProjects(); track project.id; let i = $index) {
-              <f-card [cId]="project.id.toString()" cClass="overflow-hidden flex flex-col h-full">
-                <div class="relative h-48 overflow-hidden">
-                  <img
-                    [ngSrc]="project.image || '/img/placeholder.svg'"
-                    [alt]="project.title"
-                    width="600"
-                    height="400"
-                    class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+              <div class="p-6 flex flex-col flex-grow gap-4">
+                <!-- título -->
+                <div class="h-6 w-3/4 bg-muted rounded animate-pulse"></div>
 
-                  @if (project.private) {
-                    <div class="absolute top-3 right-3">
-                      <z-badge
-                        zType="secondary"
-                        zShape="pill"
-                        class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
-                        <ng-icon name="lucideLock" class="h-3 w-3" />
-                        Privado
-                      </z-badge>
-                    </div>
-                  }
+                <!-- summary (2 líneas) -->
+                <div class="space-y-2">
+                  <div class="h-4 w-full bg-muted rounded animate-pulse"></div>
+                  <div class="h-4 w-5/6 bg-muted rounded animate-pulse"></div>
                 </div>
 
-                <f-card-content
-                  cClass="p-6 flex flex-col flex-grow"
-                  [cId]="'project' + project.id + '-card'">
-                  <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
-                  <p class="text-muted-foreground mb-4">{{ project.description }}</p>
+                <!-- badges -->
+                <div class="flex flex-wrap gap-2">
+                  <div class="h-6 w-16 bg-muted rounded-full animate-pulse"></div>
+                  <div class="h-6 w-20 bg-muted rounded-full animate-pulse"></div>
+                  <div class="h-6 w-14 bg-muted rounded-full animate-pulse"></div>
+                </div>
 
-                  <div class="flex flex-wrap gap-2 mb-6">
-                    @for (tag of project.tags; track tag) {
-                      <z-badge zType="secondary" zShape="pill">
-                        {{ tag }}
-                      </z-badge>
+                <!-- botones -->
+                <div class="flex justify-between gap-2 mt-auto pt-2">
+                  <div class="flex gap-2">
+                    <div class="h-9 w-24 bg-muted rounded animate-pulse"></div>
+                    <div class="h-9 w-20 bg-muted rounded animate-pulse"></div>
+                  </div>
+                  <div class="h-9 w-28 bg-muted rounded animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        @if (projects().length > 0) {
+          <div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              @for (project of projects(); track project.id; let i = $index) {
+                <f-card [cId]="project.id.toString()" cClass="overflow-hidden flex flex-col h-full">
+                  <div class="relative h-48 overflow-hidden">
+                    <img
+                      [ngSrc]="project.imageFullUrl || '/img/placeholder.svg'"
+                      [alt]="project.title"
+                      width="600"
+                      height="400"
+                      class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+
+                    @if (project.visibility === 'private') {
+                      <div class="absolute top-3 right-3">
+                        <z-badge
+                          zType="secondary"
+                          zShape="pill"
+                          class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
+                          <ng-icon name="lucideLock" class="h-3 w-3" />
+                          Privado
+                        </z-badge>
+                      </div>
                     }
                   </div>
 
-                  <div class="flex flex-wrap justify-between gap-2 mt-auto">
-                    <div class="flex gap-2">
-                      @if (!project.private) {
+                  <f-card-content
+                    cClass="p-6 flex flex-col flex-grow"
+                    [cId]="'project' + project.id + '-card'">
+                    <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+                    <p class="text-muted-foreground mb-4">{{ project.summary }}</p>
+
+                    <div class="flex flex-wrap gap-2 mb-6">
+                      @for (tag of project.technologies; track tag.id) {
+                        <z-badge zType="secondary" zShape="pill">
+                          {{ tag.name }}
+                        </z-badge>
+                      }
+                    </div>
+
+                    <div class="flex flex-wrap justify-between gap-2 mt-auto">
+                      <div class="flex gap-2">
+                        @if (project.visibility !== 'private') {
+                          <a
+                            z-button
+                            zType="outline"
+                            zSize="sm"
+                            [href]="project.urlGithub"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="h-9 flex items-center group">
+                            <ng-icon
+                              name="lucideGithub"
+                              class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
+                            Código
+                          </a>
+                        }
                         <a
                           z-button
                           zType="outline"
                           zSize="sm"
-                          [href]="project.github"
+                          [href]="project.urlProyect"
                           target="_blank"
                           rel="noopener noreferrer"
                           class="h-9 flex items-center group">
                           <ng-icon
-                            name="lucideGithub"
-                            class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-                          Código
+                            name="lucideExternalLink"
+                            class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                          Demo
                         </a>
-                      }
+                      </div>
                       <a
                         z-button
-                        zType="outline"
+                        zType="default"
                         zSize="sm"
-                        [href]="project.demo"
-                        target="_blank"
+                        [routerLink]="'/proyecto/' + project.slug"
                         rel="noopener noreferrer"
                         class="h-9 flex items-center group">
                         <ng-icon
-                          name="lucideExternalLink"
-                          class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                        Demo
+                          name="lucideArrowRight"
+                          class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        Ver Detalles
                       </a>
                     </div>
-                    <a
-                      z-button
-                      zType="default"
-                      zSize="sm"
-                      [routerLink]="'/proyecto/' + project.slug"
-                      rel="noopener noreferrer"
-                      class="h-9 flex items-center group">
-                      <ng-icon
-                        name="lucideArrowRight"
-                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      Ver Detalles
-                    </a>
-                  </div>
-                </f-card-content>
-              </f-card>
-            }
-          </div>
-
-          <!-- paginación -->
-          @if (totalPages() > 1) {
-            <div class="flex justify-center mt-12">
-              <nav class="flex items-center gap-1">
-                <button
-                  z-button
-                  zSize="icon"
-                  class="h-10 cursor-pointer text-muted-foreground"
-                  zType="outline"
-                  (click)="goToPreviousPage()"
-                  [zDisabled]="currentPage() === 1">
-                  <ng-icon name="lucideChevronLeft" class="h-4 w-4" />
-                </button>
-
-                <div class="flex items-center">
-                  @for (pageNumber of pageNumbers(); track pageNumber; let i = $index) {
-                    @if (typeof pageNumber === 'number') {
-                      <button
-                        z-button
-                        zSize="icon"
-                        class="cursor-pointer h-10 w-10 mx-1"
-                        [zType]="currentPage() === pageNumber ? 'default' : 'outline'"
-                        (click)="paginate(pageNumber)">
-                        {{ pageNumber }}
-                      </button>
-                    } @else {
-                      <span [id]="i" class="mx-1 text-muted-foreground">
-                        {{ pageNumber }}
-                      </span>
-                    }
-                  }
-                </div>
-
-                <button
-                  z-button
-                  zSize="icon"
-                  class="h-10 cursor-pointer text-muted-foreground"
-                  zType="outline"
-                  (click)="goToNextPage()"
-                  [zDisabled]="currentPage() === totalPages()">
-                  <ng-icon name="lucideChevronRight" class="h-4 w-4" />
-                </button>
-              </nav>
+                  </f-card-content>
+                </f-card>
+              }
             </div>
-          }
-          <!-- fin paginación -->
-        </div>
-      } @else {
-        <div class="text-center py-12">
-          <p class="text-lg text-muted-foreground mb-4">
-            No se encontraron proyectos con los filtros seleccionados.
-          </p>
-          <button z-button (click)="clearFilters()" class="cursor-pointer">Limpiar filtros</button>
+          </div>
+        } @else {
+          <div class="text-center py-12">
+            <p class="text-lg text-muted-foreground mb-4">
+              No se encontraron proyectos con los filtros seleccionados.
+            </p>
+            <button z-button (click)="clearFilters()" class="cursor-pointer">
+              Limpiar filtros
+            </button>
+          </div>
+        }
+      }
+
+      <!-- paginación -->
+      @if (totalPages() > 1) {
+        <div class="flex justify-center mt-12">
+          <nav class="flex items-center gap-1">
+            <button
+              z-button
+              zSize="icon"
+              class="h-10 cursor-pointer text-muted-foreground"
+              zType="outline"
+              (click)="goToPrevious()"
+              [zDisabled]="currentPage() === 1">
+              <ng-icon name="lucideChevronLeft" class="h-4 w-4" />
+            </button>
+
+            <div class="flex items-center">
+              @for (pageNumber of pageNumbers(); track pageNumber; let i = $index) {
+                @if (typeof pageNumber === 'number') {
+                  <button
+                    z-button
+                    zSize="icon"
+                    class="cursor-pointer h-10 w-10 mx-1"
+                    [zType]="currentPage() === pageNumber ? 'default' : 'outline'"
+                    (click)="goToPage(pageNumber)">
+                    {{ pageNumber }}
+                  </button>
+                } @else {
+                  <span [id]="i" class="mx-1 text-muted-foreground">
+                    {{ pageNumber }}
+                  </span>
+                }
+              }
+            </div>
+
+            <button
+              z-button
+              zSize="icon"
+              class="h-10 cursor-pointer text-muted-foreground"
+              zType="outline"
+              (click)="goToNext()"
+              [zDisabled]="currentPage() === totalPages()">
+              <ng-icon name="lucideChevronRight" class="h-4 w-4" />
+            </button>
+          </nav>
         </div>
       }
+      <!-- fin paginación -->
     </div>
   </section>
 </main>
