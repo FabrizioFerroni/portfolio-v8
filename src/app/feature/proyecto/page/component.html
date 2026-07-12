@@ -1,54 +1,4 @@
-@if (!project) {
-  <div class="min-h-screen flex flex-col select-none">
-    <app-navbar />
-    <main class="flex-grow flex items-center justify-center py-20 px-4">
-      <div class="max-w-3xl w-full mx-auto text-center">
-        <div class="anim-fade-slide-up mb-8">
-          <h1 class="text-7xl md:text-8xl font-bold text-primary mb-4">Oops!</h1>
-          <h2 class="text-2xl md:text-3xl font-semibold mb-4">Proyecto no encontrado</h2>
-          <p class="text-lg text-muted-foreground mb-8 text-balance">
-            El proyecto que buscas no existe, fue archivado o quizás se escapó a otra rama del
-            repositorio. 🌿
-          </p>
-        </div>
-
-        <div class="anim-fade-scale-in relative w-full max-w-md mx-auto mb-12">
-          <div class="w-full h-64 relative">
-            <img
-              ngSrc="/img/images/no-project-illustration.png"
-              alt="Proyecto no encontrado"
-              fill
-              class="object-contain" />
-          </div>
-        </div>
-
-        <div class="anim-fade-in flex flex-col sm:flex-row gap-4 justify-center">
-          <!-- botones -->
-          <a z-button routerLink="/proyectos" zSize="lg" class="group h-10 flex items-center">
-            <ng-icon
-              name="lucideFolderSearch"
-              class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-            Ver todos los proyectos
-          </a>
-
-          <a
-            z-button
-            routerLink="/"
-            zSize="lg"
-            zType="outline"
-            class="group h-10 flex items-center">
-            <ng-icon
-              name="lucideHome"
-              class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
-            Volver a inicio
-          </a>
-        </div>
-      </div>
-    </main>
-
-    <app-footer />
-  </div>
-} @else {
+@if (projectLoading()) {
   <div class="min-h-screen select-none">
     <app-navbar />
 
@@ -56,82 +6,33 @@
       <section class="bg-muted/30 py-16">
         <div class="container mx-auto px-4 max-w-4xl">
           <div class="mb-8">
-            <a
-              z-button
-              routerLink="/proyectos"
-              zType="ghost"
-              class="cursor-pointer h-10"
-              zSize="sm">
-              <ng-icon
-                name="lucideArrowLeft"
-                class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
-              Volver a proyectos
-            </a>
+            <div class="h-9 w-40 rounded-md bg-muted animate-pulse mb-6"></div>
 
             <div class="flex items-center gap-3 mb-4">
-              <h1 class="text-4xl md:text-5xl font-bold">{{ project.title }}</h1>
-              @if (project.private) {
-                <z-badge
-                  zType="secondary"
-                  zShape="pill"
-                  class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
-                  <ng-icon name="lucideLock" class="h-3 w-3" />
-                  Privado
-                </z-badge>
-              }
+              <div class="h-12 w-2/3 rounded-md bg-muted animate-pulse"></div>
             </div>
 
             <div class="flex flex-wrap gap-2 mb-6">
-              @for (tag of project.tags; track tag) {
-                <z-badge zType="secondary" zShape="pill">
-                  {{ tag }}
-                </z-badge>
+              @for (i of [1, 2, 3, 4]; track i) {
+                <div class="h-6 w-20 rounded-full bg-muted animate-pulse"></div>
               }
             </div>
           </div>
 
           <div class="grid md:grid-cols-1 gap-12 items-start">
-            <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
-              <img
-                [ngSrc]="project.image || '/img/placeholder.svg'"
-                [alt]="project.title"
-                fill
-                class="object-cover" />
-            </div>
+            <div
+              class="relative aspect-video rounded-xl overflow-hidden bg-muted animate-pulse"></div>
 
             <div>
-              <p class="text-lg mb-6">{{ project.description }}</p>
+              <div class="space-y-2 mb-6">
+                <div class="h-5 w-full rounded bg-muted animate-pulse"></div>
+                <div class="h-5 w-5/6 rounded bg-muted animate-pulse"></div>
+                <div class="h-5 w-3/4 rounded bg-muted animate-pulse"></div>
+              </div>
 
               <div class="flex flex-wrap gap-4">
-                <a
-                  z-button
-                  zType="default"
-                  zSize="sm"
-                  [href]="project.demo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="h-10 flex items-center group">
-                  <ng-icon
-                    name="lucideExternalLink"
-                    class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                  Ver Demo
-                </a>
-
-                @if (!project.private) {
-                  <a
-                    z-button
-                    zType="outline"
-                    zSize="sm"
-                    [href]="project.github"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="h-10 flex items-center group">
-                    <ng-icon
-                      name="lucideGithub"
-                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-                    Ver Código
-                  </a>
-                }
+                <div class="h-10 w-32 rounded-md bg-muted animate-pulse"></div>
+                <div class="h-10 w-32 rounded-md bg-muted animate-pulse"></div>
               </div>
             </div>
           </div>
@@ -140,304 +41,568 @@
 
       <section class="py-16">
         <div class="container mx-auto px-4">
-          <f-tabs class="max-w-4xl mx-auto" [value]="activeTab()">
-            <div class="md:hidden mb-8">
-              <z-select
-                class="w-full outFocus"
-                [zValue]="activeTab()"
-                (zSelectionChange)="setActiveTab($event)">
-                <ng-template #overviewTpl>
-                  <div class="flex items-center gap-2">Descripción</div>
-                </ng-template>
-
-                <ng-template #featuresTpl>
-                  <div class="flex items-center gap-2">Características</div>
-                </ng-template>
-
-                <ng-template #techTpl>
-                  <div class="flex items-center gap-2">Tecnologías</div>
-                </ng-template>
-
-                <ng-template #galleryTpl>
-                  <div class="flex items-center gap-2">Galería</div>
-                </ng-template>
-
-                <z-select-item zValue="overview" [zTemplate]="overviewTpl">
-                  <div class="flex items-center gap-2">Descripción</div>
-                </z-select-item>
-
-                <z-select-item zValue="features" [zTemplate]="featuresTpl">
-                  <div class="flex items-center gap-2">Características</div>
-                </z-select-item>
-
-                <z-select-item zValue="tech" [zTemplate]="techTpl">
-                  <div class="flex items-center gap-2">Tecnologías</div>
-                </z-select-item>
-
-                <z-select-item zValue="gallery" [zTemplate]="galleryTpl">
-                  <div class="flex items-center gap-2">Galería</div>
-                </z-select-item>
-              </z-select>
+          <div class="max-w-4xl mx-auto">
+            <div class="mb-8 hidden md:flex gap-2">
+              @for (i of [1, 2, 3, 4]; track i) {
+                <div class="h-9 w-28 rounded-md bg-muted animate-pulse"></div>
+              }
             </div>
 
-            <div class="mb-8 hidden md:block">
-              <div class="overflow-x-auto pb-2">
-                <f-tabs-list class="inline-flex min-w-full sm:w-auto gap-2">
-                  <f-tabs-trigger value="overview" class="whitespace-nowrap px-4">
-                    <span>Descripción</span>
-                  </f-tabs-trigger>
+            <div class="md:hidden mb-8">
+              <div class="h-10 w-full rounded-md bg-muted animate-pulse"></div>
+            </div>
 
-                  <f-tabs-trigger value="features" class="whitespace-nowrap px-4">
-                    <span>Características</span>
-                  </f-tabs-trigger>
-
-                  <f-tabs-trigger value="tech" class="whitespace-nowrap px-4">
-                    <span>Tecnologías</span>
-                  </f-tabs-trigger>
-
-                  <f-tabs-trigger value="gallery" class="whitespace-nowrap px-4">
-                    <span>Galería</span>
-                  </f-tabs-trigger>
-                </f-tabs-list>
+            <div class="rounded-lg border p-6">
+              <div class="h-7 w-56 rounded bg-muted animate-pulse mb-6"></div>
+              <div class="space-y-3">
+                <div class="h-4 w-full rounded bg-muted animate-pulse"></div>
+                <div class="h-4 w-full rounded bg-muted animate-pulse"></div>
+                <div class="h-4 w-4/5 rounded bg-muted animate-pulse"></div>
+                <div class="h-4 w-2/3 rounded bg-muted animate-pulse"></div>
               </div>
             </div>
-
-            <!-- tabs overviews -->
-            <f-tabs-content value="overview">
-              <f-card>
-                <f-card-content cClass="p-6">
-                  <div class="prose max-w-none">
-                    <h3 class="text-2xl font-semibold mb-4 text-foreground">Descripción General</h3>
-                    <div class="whitespace-pre-line text-muted-foreground">
-                      {{ project.longDescription }}
-                    </div>
-
-                    @if (project.testimonial) {
-                      <div
-                        class="mt-8 p-6 bg-primary/10 rounded-lg border border-primary/20 dark:bg-primary/20">
-                        <div class="flex items-start gap-2">
-                          <!-- <ng-icon name="lucideQuote" class="h-8 w-8 text-primary/30 mb-4" /> -->
-                          <ng-icon
-                            name="lucideQuote"
-                            [size]="'32'"
-                            class="text-primary/30 shrink-0 mt-1" />
-                          <blockquote class="text-lg italic mb-4 text-foreground">
-                            "{{ project.testimonial.quote }}"
-                          </blockquote>
-                        </div>
-                        <div class="flex items-center">
-                          <div class="ml-0">
-                            <p class="font-medium text-foreground">
-                              {{ project.testimonial.author }}
-                            </p>
-                            <p class="text-sm text-muted-foreground">
-                              {{ project.testimonial.role }}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    }
-
-                    <h3 class="text-xl font-semibold mt-8 mb-4 text-foreground">
-                      Desafíos y Soluciones
-                    </h3>
-                    <ul class="space-y-2">
-                      @for (challenge of project.challenges; track challenge; let i = $index) {
-                        <li [id]="i" class="text-muted-foreground">
-                          {{ challenge }}
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                </f-card-content>
-              </f-card>
-            </f-tabs-content>
-            <!-- fin tabs overviews -->
-
-            <!-- tabs features -->
-            <f-tabs-content value="features">
-              <f-card>
-                <f-card-content cClass="p-6">
-                  <h3 class="text-2xl font-semibold mb-6 text-foreground">
-                    Características Principales
-                  </h3>
-                  <div class="grid md:grid-cols-2 gap-6">
-                    @for (feature of project.features; track feature; let i = $index) {
-                      <div [id]="i" class="flex items-center">
-                        <div
-                          class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110">
-                          <span class="text-primary font-semibold">{{ i + 1 }}</span>
-                        </div>
-                        <div>
-                          <p class="text-base">{{ feature }}</p>
-                        </div>
-                      </div>
-                    }
-                  </div>
-                </f-card-content>
-              </f-card>
-            </f-tabs-content>
-            <!-- fin tabs features -->
-
-            <!-- tabs tech -->
-            <f-tabs-content value="tech">
-              <f-card>
-                <f-card-content cClass="p-6">
-                  <h3 class="text-2xl font-semibold mb-6 text-foreground">Stack Tecnológico</h3>
-
-                  <div class="grid gap-6">
-                    <div>
-                      <h4 class="text-lg font-medium mb-3 text-foreground">Frontend</h4>
-                      <div class="flex flex-wrap gap-2">
-                        @for (tech of project.technologies.frontend; track tech; let i = $index) {
-                          <z-badge
-                            zType="outline"
-                            zShape="pill"
-                            class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                            {{ tech }}
-                          </z-badge>
-                        }
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 class="text-lg font-medium mb-3 text-foreground">Backend</h4>
-                      <div class="flex flex-wrap gap-2">
-                        @for (tech of project.technologies.backend; track tech; let i = $index) {
-                          <z-badge
-                            zType="outline"
-                            zShape="pill"
-                            class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                            {{ tech }}
-                          </z-badge>
-                        }
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 class="text-lg font-medium mb-3 text-foreground">
-                        DevOps & Infraestructura
-                      </h4>
-                      <div class="flex flex-wrap gap-2">
-                        @for (tech of project.technologies.devops; track tech; let i = $index) {
-                          <z-badge
-                            zType="outline"
-                            zShape="pill"
-                            class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                            {{ tech }}
-                          </z-badge>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </f-card-content>
-              </f-card>
-            </f-tabs-content>
-            <!-- fin tabs tech -->
-
-            <!-- tabs galerry -->
-            <f-tabs-content value="gallery">
-              <f-card>
-                <f-card-content cClass="p-6">
-                  <h3 class="text-2xl font-semibold mb-6 text-foreground">Galería del Proyecto</h3>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @for (img of project.gallery; track img; let i = $index) {
-                      <!-- // eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
-                      <!-- (click)="selectedImage.set(img)" -->
-                      <a
-                        [id]="i"
-                        class="relative aspect-video rounded-lg overflow-hidden group cursor-pointer"
-                        (click)="selectedImage.set(img)"
-                        href="javascript:void(0);">
-                        <img
-                          [ngSrc]="img.url || '/img/placeholder.svg'"
-                          [alt]="`${project.title} - Imagen ${i + 1}`"
-                          fill
-                          class="object-cover transition-transform duration-300 group-hover:scale-105" />
-                        <div
-                          class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
-                          <p class="text-white text-sm">
-                            {{ img.description }}
-                          </p>
-
-                          <div class="absolute top-2 right-2">
-                            <ng-icon name="lucideMaximize2" class="h-5 w-5 text-white" />
-                          </div>
-                        </div>
-                      </a>
-                    }
-                  </div>
-                </f-card-content>
-              </f-card>
-            </f-tabs-content>
-            <!-- fin tabs galerry -->
-          </f-tabs>
+          </div>
         </div>
       </section>
 
-      @if (relatedProjects.length > 0) {
-        <section class="py-16 bg-muted/30">
-          <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-12 text-center">Proyectos Relacionados</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              @for (relationals of relatedProjects; track relationals.id; let i = $index) {
-                <f-card [cId]="relationals.id.toString()" cClass="overflow-hidden group">
-                  <div class="relative h-48 overflow-hidden">
-                    <img
-                      [ngSrc]="relationals.image || '/img/placeholder.svg'"
-                      [alt]="`${project.title} - Imagen ${i + 1}`"
-                      fill
-                      class="object-cover transition-transform duration-300 group-hover:scale-105" />
-
-                    @if (relationals.private) {
-                      <div class="absolute top-3 right-3">
-                        <z-badge
-                          zType="secondary"
-                          zShape="pill"
-                          class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
-                          <ng-icon name="lucideLock" class="h-3 w-3" />
-                          Privado
-                        </z-badge>
-                      </div>
-                    }
-                  </div>
-
-                  <f-card-content cClass="p-6">
-                    <h3 class="text-xl font-semibold mb-2">
-                      {{ relationals.title }}
-                    </h3>
-
-                    <p class="text-muted-foreground mb-4 line-clamp-2">
-                      {{ relationals.description }}
-                    </p>
-
-                    <a
-                      class="group flex items-center"
-                      z-button
-                      [routerLink]="'/proyecto/' + relationals.slug">
-                      <ng-icon
-                        name="lucideArrowRight"
-                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      Ver Proyecto
-                    </a>
-                  </f-card-content>
-                </f-card>
-              }
-            </div>
+      <section class="py-16 bg-muted/30">
+        <div class="container mx-auto px-4">
+          <div class="h-8 w-72 mx-auto rounded bg-muted animate-pulse mb-12"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="rounded-lg border overflow-hidden">
+                <div class="h-48 w-full bg-muted animate-pulse"></div>
+                <div class="p-6 space-y-3">
+                  <div class="h-6 w-3/4 rounded bg-muted animate-pulse"></div>
+                  <div class="h-4 w-full rounded bg-muted animate-pulse"></div>
+                  <div class="h-4 w-2/3 rounded bg-muted animate-pulse"></div>
+                  <div class="h-9 w-32 rounded-md bg-muted animate-pulse mt-4"></div>
+                </div>
+              </div>
+            }
           </div>
-        </section>
-      }
+        </div>
+      </section>
     </main>
 
     <app-footer />
-
-    @if (project) {
-      <app-image-dialog
-        [open]="!!selectedImage()"
-        [title]="project.title"
-        [image]="selectedImage()"
-        (closed)="selectedImage.set(null)" />
-    }
   </div>
+} @else {
+  @if (project(); as project) {
+    <div class="min-h-screen select-none">
+      <app-navbar />
+
+      <main class="pt-0">
+        <section class="bg-muted/30 py-16">
+          <div class="container mx-auto px-4 max-w-4xl">
+            <div class="mb-8">
+              <a
+                z-button
+                routerLink="/proyectos"
+                zType="ghost"
+                class="cursor-pointer h-10"
+                zSize="sm">
+                <ng-icon
+                  name="lucideArrowLeft"
+                  class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
+                Volver a proyectos
+              </a>
+
+              <div class="flex items-center gap-3 mb-2">
+                <h1 class="text-4xl md:text-5xl font-bold">{{ project.title }}</h1>
+                @if (project.visibility === 'private') {
+                  <z-badge
+                    zType="secondary"
+                    zShape="pill"
+                    class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
+                    <ng-icon name="lucideLock" class="h-3 w-3" />
+                    Privado
+                  </z-badge>
+                }
+              </div>
+              <div class="flex mb-4 items-center gap-3">
+                <span class="text-sm font-normal text-muted-foreground flex items-center gap-1">
+                  <ng-icon [name]="getCategoryMeta(project.category).icon" class="h-4 w-4" />
+                  {{ getCategoryMeta(project.category).label }}
+                </span>
+              </div>
+
+              <div class="flex flex-wrap gap-2 mb-6">
+                @for (tech of project.technologies; track tech.id) {
+                  <z-badge zType="secondary" zShape="pill">
+                    {{ tech.name }}
+                  </z-badge>
+                }
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-1 gap-12 items-start">
+              <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                <img
+                  [ngSrc]="project.imageFullUrl || '/img/placeholder.svg'"
+                  [alt]="project.title"
+                  fill
+                  class="object-cover" />
+              </div>
+
+              <div>
+                <p class="text-lg mb-6">{{ project.summary }}</p>
+
+                <div class="flex flex-wrap gap-4">
+                  <a
+                    z-button
+                    zType="default"
+                    zSize="sm"
+                    [href]="project.urlProyect"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="h-10 flex items-center group">
+                    <ng-icon
+                      name="lucideExternalLink"
+                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    Ver Demo
+                  </a>
+
+                  @if (project.visibility !== 'private') {
+                    <a
+                      z-button
+                      zType="outline"
+                      zSize="sm"
+                      [href]="project.urlGithub"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="h-10 flex items-center group">
+                      <ng-icon
+                        name="lucideGithub"
+                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
+                      Ver Código
+                    </a>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-16">
+          <div class="container mx-auto px-4">
+            <f-tabs class="max-w-4xl mx-auto" [value]="activeTab()">
+              <div class="md:hidden mb-8">
+                <z-select
+                  class="w-full outFocus"
+                  [zValue]="activeTab()"
+                  (zSelectionChange)="setActiveTab($event)">
+                  <ng-template #overviewTpl>
+                    <div class="flex items-center gap-2">Descripción</div>
+                  </ng-template>
+
+                  <ng-template #featuresTpl>
+                    <div class="flex items-center gap-2">Características</div>
+                  </ng-template>
+
+                  <ng-template #techTpl>
+                    <div class="flex items-center gap-2">Tecnologías</div>
+                  </ng-template>
+
+                  <ng-template #galleryTpl>
+                    <div class="flex items-center gap-2">Galería</div>
+                  </ng-template>
+
+                  <z-select-item zValue="overview" [zTemplate]="overviewTpl">
+                    <div class="flex items-center gap-2">Descripción</div>
+                  </z-select-item>
+
+                  <z-select-item zValue="features" [zTemplate]="featuresTpl">
+                    <div class="flex items-center gap-2">Características</div>
+                  </z-select-item>
+
+                  <z-select-item zValue="tech" [zTemplate]="techTpl">
+                    <div class="flex items-center gap-2">Tecnologías</div>
+                  </z-select-item>
+
+                  <z-select-item zValue="gallery" [zTemplate]="galleryTpl">
+                    <div class="flex items-center gap-2">Galería</div>
+                  </z-select-item>
+                </z-select>
+              </div>
+
+              <div class="mb-8 hidden md:block">
+                <div class="overflow-x-auto pb-2">
+                  <f-tabs-list class="inline-flex min-w-full sm:w-auto gap-2">
+                    <f-tabs-trigger value="overview" class="whitespace-nowrap px-4">
+                      <span>Descripción</span>
+                    </f-tabs-trigger>
+
+                    <f-tabs-trigger value="features" class="whitespace-nowrap px-4">
+                      <span>Características</span>
+                    </f-tabs-trigger>
+
+                    <f-tabs-trigger value="tech" class="whitespace-nowrap px-4">
+                      <span>Tecnologías</span>
+                    </f-tabs-trigger>
+
+                    <f-tabs-trigger value="gallery" class="whitespace-nowrap px-4">
+                      <span>Galería</span>
+                    </f-tabs-trigger>
+                  </f-tabs-list>
+                </div>
+              </div>
+
+              <!-- tabs overviews -->
+              <f-tabs-content value="overview">
+                <f-card>
+                  <f-card-content cClass="p-6">
+                    <div class="prose max-w-none">
+                      <h3 class="text-2xl font-semibold mb-4 text-foreground">
+                        Descripción General
+                      </h3>
+                      <div class="whitespace-pre-line text-muted-foreground">
+                        {{ project.description }}
+                      </div>
+                    </div>
+                  </f-card-content>
+                </f-card>
+              </f-tabs-content>
+              <!-- fin tabs overviews -->
+
+              <!-- tabs features -->
+              <f-tabs-content value="features">
+                <f-card>
+                  <f-card-content cClass="p-6">
+                    <h3 class="text-2xl font-semibold mb-6 text-foreground">
+                      Características Principales
+                    </h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                      @for (feature of project.features; track feature.id; let i = $index) {
+                        <div [id]="i" class="flex items-center">
+                          <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110">
+                            <span class="text-primary font-semibold">{{ i + 1 }}</span>
+                          </div>
+                          <div>
+                            <p class="text-base">{{ feature.description }}</p>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </f-card-content>
+                </f-card>
+              </f-tabs-content>
+              <!-- fin tabs features -->
+
+              <!-- tabs tech -->
+              <f-tabs-content value="tech">
+                <f-card>
+                  <f-card-content cClass="p-6">
+                    <h3 class="text-2xl font-semibold mb-6 text-foreground">Stack Tecnológico</h3>
+
+                    <div class="grid gap-6">
+                      @if (groupedTechnologies().frontend.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">Frontend</h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().frontend;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      @if (groupedTechnologies().backend.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">Backend</h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().backend;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      @if (groupedTechnologies().devops.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">
+                            DevOps & Infraestructura
+                          </h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().devops;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      @if (groupedTechnologies().databases.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">Bases de datos</h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().databases;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      @if (groupedTechnologies().tools.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">Herramientas</h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().tools;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      @if (groupedTechnologies().others.length > 0) {
+                        <div>
+                          <h4 class="text-lg font-medium mb-3 text-foreground">Otros</h4>
+                          <div class="flex flex-wrap gap-2">
+                            @for (
+                              tech of groupedTechnologies().others;
+                              track tech.id;
+                              let i = $index
+                            ) {
+                              <z-badge
+                                zType="outline"
+                                zShape="pill"
+                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                {{ tech.name }}
+                              </z-badge>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </f-card-content>
+                </f-card>
+              </f-tabs-content>
+              <!-- fin tabs tech -->
+
+              <!-- tabs galerry -->
+              <f-tabs-content value="gallery">
+                <f-card>
+                  <f-card-content cClass="p-6">
+                    <h3 class="text-2xl font-semibold mb-6 text-foreground">
+                      Galería del Proyecto
+                    </h3>
+                    @if (galleryImages()!.length > 0) {
+                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @for (img of galleryImages(); track img; let i = $index) {
+                          <!-- // eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
+                          <a
+                            [id]="i"
+                            class="relative aspect-video rounded-lg overflow-hidden group cursor-pointer"
+                            (click)="
+                              selectedImage.set({ url: img.imageFullUrl, description: img.altText })
+                            "
+                            href="javascript:void(0);">
+                            <img
+                              [ngSrc]="img.imageFullUrl || '/img/placeholder.svg'"
+                              [alt]="`${project.title} - Imagen ${i + 1}`"
+                              fill
+                              class="object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <div
+                              class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+                              <p class="text-white text-sm">
+                                {{ img.altText }}
+                              </p>
+
+                              <div class="absolute top-2 right-2">
+                                <ng-icon name="lucideMaximize2" class="h-5 w-5 text-white" />
+                              </div>
+                            </div>
+                          </a>
+                        }
+                      </div>
+                    } @else {
+                      <div class="flex flex-col items-center justify-center py-16 text-center">
+                        <div
+                          class="flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                          <ng-icon name="lucideImageOff" class="h-7 w-7 text-muted-foreground" />
+                        </div>
+                        <p class="text-base font-medium text-foreground mb-1">
+                          Sin imágenes todavía
+                        </p>
+                        <p class="text-sm text-muted-foreground max-w-sm">
+                          Este proyecto todavía no tiene imágenes cargadas en la galería.
+                        </p>
+                      </div>
+                    }
+                  </f-card-content>
+                </f-card>
+              </f-tabs-content>
+              <!-- fin tabs galerry -->
+            </f-tabs>
+          </div>
+        </section>
+
+        @if (relatedProjects().length > 0) {
+          <section class="py-16 bg-muted/30">
+            <div class="container mx-auto px-4">
+              <h2 class="text-3xl font-bold mb-12 text-center">Proyectos Relacionados</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @for (relationals of relatedProjects(); track relationals.id; let i = $index) {
+                  <f-card [cId]="relationals.id.toString()" cClass="overflow-hidden group">
+                    <div class="relative h-48 overflow-hidden">
+                      <img
+                        [ngSrc]="relationals.imageFullUrl || '/img/placeholder.svg'"
+                        [alt]="`${project.title} - Imagen ${i + 1}`"
+                        fill
+                        class="object-cover transition-transform duration-300 group-hover:scale-105" />
+
+                      @if (relationals.visibility === 'private') {
+                        <div class="absolute top-3 right-3">
+                          <z-badge
+                            zType="secondary"
+                            zShape="pill"
+                            class="flex items-center gap-1 bg-background/80 backdrop-blur-sm">
+                            <ng-icon name="lucideLock" class="h-3 w-3" />
+                            Privado
+                          </z-badge>
+                        </div>
+                      }
+                    </div>
+
+                    <f-card-content cClass="p-6">
+                      <div class="mb-2 flex justify-between items-center">
+                        <h3 class="text-xl font-semibold">
+                          {{ relationals.title }}
+                        </h3>
+                        <span
+                          class="text-sm font-normal text-muted-foreground flex items-center gap-1">
+                          <ng-icon
+                            [name]="getCategoryMeta(relationals.category).icon"
+                            class="h-4 w-4" />
+                          {{ getCategoryMeta(relationals.category).label }}
+                        </span>
+                      </div>
+
+                      <p class="text-muted-foreground mb-4 line-clamp-2">
+                        {{ relationals.summary }}
+                      </p>
+
+                      <a
+                        class="group flex items-center"
+                        z-button
+                        [routerLink]="'/proyecto/' + relationals.slug">
+                        <ng-icon
+                          name="lucideArrowRight"
+                          class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        Ver Proyecto
+                      </a>
+                    </f-card-content>
+                  </f-card>
+                }
+              </div>
+            </div>
+          </section>
+        }
+      </main>
+
+      <app-footer />
+
+      @if (project) {
+        <app-image-dialog
+          [open]="!!selectedImage()"
+          [title]="project.title"
+          [image]="selectedImage()"
+          (closed)="selectedImage.set(null)" />
+      }
+    </div>
+  } @else {
+    <div class="min-h-screen flex flex-col select-none">
+      <app-navbar />
+      <main class="flex-grow flex items-center justify-center py-20 px-4">
+        <div class="max-w-3xl w-full mx-auto text-center">
+          <div class="anim-fade-slide-up mb-8">
+            <h1 class="text-7xl md:text-8xl font-bold text-primary mb-4">Oops!</h1>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-4">Proyecto no encontrado</h2>
+            <p class="text-lg text-muted-foreground mb-8 text-balance">
+              El proyecto que buscas no existe, fue archivado o quizás se escapó a otra rama del
+              repositorio. 🌿
+            </p>
+          </div>
+
+          <div class="anim-fade-scale-in relative w-full max-w-md mx-auto mb-12">
+            <div class="w-full h-64 relative">
+              <img
+                ngSrc="/img/images/no-project-illustration.png"
+                alt="Proyecto no encontrado"
+                fill
+                class="object-contain" />
+            </div>
+          </div>
+
+          <div class="anim-fade-in flex flex-col sm:flex-row gap-4 justify-center">
+            <a z-button routerLink="/proyectos" zSize="lg" class="group h-10 flex items-center">
+              <ng-icon
+                name="lucideFolderSearch"
+                class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+              Ver todos los proyectos
+            </a>
+
+            <a
+              z-button
+              routerLink="/"
+              zSize="lg"
+              zType="outline"
+              class="group h-10 flex items-center">
+              <ng-icon
+                name="lucideHome"
+                class="mr-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+              Volver a inicio
+            </a>
+          </div>
+        </div>
+      </main>
+
+      <app-footer />
+    </div>
+  }
 }

@@ -4,7 +4,13 @@ import { BaseHttpService } from '@/shared/services';
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProjectData, ProjectHome, ProjectList } from '../interfaces';
+import {
+  ProjectData,
+  ProjectHome,
+  ProjectImageList,
+  ProjectList,
+  ProjectRelated,
+} from '../interfaces';
 import { construirQueryParams } from '@/shared/functions';
 
 @Injectable()
@@ -39,5 +45,24 @@ export class ProyectoService extends BaseHttpService {
     return this.http.get<ApiResponse<string[]>>(`${this.apiUrl}/project-technologies`, {
       observe: 'response',
     });
+  }
+
+  obtenerImagenesPorProjectId(
+    projectId: string
+  ): Observable<HttpResponse<ApiResponse<ProjectImageList[]>>> {
+    return this.http.get<ApiResponse<ProjectImageList[]>>(`${this.apiUrl}/images/${projectId}`, {
+      observe: 'response',
+    });
+  }
+
+  obtenerRelatedProjectsPorProjectId(
+    projectId: string
+  ): Observable<HttpResponse<ApiResponse<ProjectRelated[]>>> {
+    return this.http.get<ApiResponse<ProjectRelated[]>>(
+      `${this.apiUrl}/projects/related/${projectId}`,
+      {
+        observe: 'response',
+      }
+    );
   }
 }
