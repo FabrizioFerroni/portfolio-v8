@@ -7,6 +7,7 @@ export interface ProjectState {
   project: ProjectList | null;
   meta: Pagination | null;
   isLoading: boolean;
+  isLoadingMore: boolean;
   error: string | null;
   statusCode: number | null;
   //TODO: Images states

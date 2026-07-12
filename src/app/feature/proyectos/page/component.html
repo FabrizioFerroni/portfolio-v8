@@ -249,7 +249,7 @@
         </div>
       }
 
-      @if (isLoading()) {
+      @if (isLoading() && projects().length === 0) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           @for (item of skeletonItems; track $index) {
             <div class="overflow-hidden flex flex-col h-full rounded-lg border">
@@ -388,7 +388,21 @@
       }
 
       <!-- paginación -->
-      @if (totalPages() > 1) {
+      @if (projects().length > 0) {
+        <div #scrollAnchor class="flex items-center justify-center mt-12 h-10">
+          @if (isLoadingMore()) {
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <span
+                class="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent">
+              </span>
+              Cargando más proyectos...
+            </div>
+          } @else if (showEndOfListMessage()) {
+            <p class="text-sm text-muted-foreground">Ya viste todos los proyectos 🎉</p>
+          }
+        </div>
+      }
+      <!-- @if (totalPages() > 1) {
         <div class="flex justify-center mt-12">
           <nav class="flex items-center gap-1">
             <button
@@ -431,7 +445,7 @@
             </button>
           </nav>
         </div>
-      }
+      } -->
       <!-- fin paginación -->
     </div>
   </section>

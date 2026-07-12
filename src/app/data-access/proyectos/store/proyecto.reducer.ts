@@ -8,6 +8,7 @@ const initialState: ProjectState = {
   project: null,
   meta: null,
   isLoading: false,
+  isLoadingMore: false,
   error: null,
   statusCode: null,
   //TODO: Images states
@@ -24,13 +25,16 @@ export const projectFeature = createFeature({
   name: 'proyectos',
   reducer: createReducer(
     initialState,
-    on(ProyectoActions.getProyectos, state => ({
+    on(ProyectoActions.getProyectos, (state, { paginado }) => ({
       ...state,
-      projects: [],
+      //projects: [],
+      projects: paginado.page === 1 ? [] : state.projects,
       projectsHome: [],
       project: null,
       meta: null,
-      isLoading: true,
+      //isLoading: true,
+      isLoading: paginado.page === 1,
+      isLoadingMore: paginado.page > 1,
       error: null,
       statusCode: null,
       imagesProject: null,
@@ -41,11 +45,13 @@ export const projectFeature = createFeature({
 
     on(ProyectoActions.getProyectosSuccess, (state, { data }) => ({
       ...state,
-      projects: data.projects,
+      //projects: data.projects,
+      projects: data.meta.currentPage === 1 ? data.projects : [...state.projects, ...data.projects],
       projectsHome: [],
       project: null,
       meta: data.meta,
       isLoading: false,
+      isLoadingMore: false,
       error: null,
       statusCode: 200,
       imagesProject: null,
@@ -54,13 +60,14 @@ export const projectFeature = createFeature({
       imageStatusCodeProject: null,
     })),
 
-    on(ProyectoActions.getProyectosFailed, (state, { error, statusCode }) => ({
+    on(ProyectoActions.getProyectosFailed, (state, { error, statusCode, paginado }) => ({
       ...state,
-      projects: [],
+      projects: paginado?.page === 1 ? [] : state.projects,
       projectsHome: [],
       project: null,
       meta: null,
       isLoading: false,
+      isLoadingMore: false,
       error,
       statusCode,
       imagesProject: null,

@@ -28,6 +28,9 @@ import {
   PLATFORM_ID,
   Signal,
   WritableSignal,
+  viewChild,
+  ElementRef,
+  effect,
 } from '@angular/core';
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Accordion, Card, CardContent, Checkbox } from '@/shared/components/fabriziodev';
@@ -36,6 +39,7 @@ import { SeoService } from '@/core';
 import { Store } from '@ngrx/store';
 import {
   errorProject,
+  loadingMoreProject,
   loadingProject,
   paginationMeta,
   ProjectList,
@@ -142,38 +146,14 @@ export class Proyectos implements OnInit {
   readonly currentPage: WritableSignal<number> = signal<number>(1);
   readonly totalPages: WritableSignal<number> = signal<number>(1);
   readonly hasNextPage: WritableSignal<boolean> = signal<boolean>(false);
-  readonly hasPreviousPage: WritableSignal<boolean> = signal<boolean>(false);
-  readonly pages = computed<(number | null)[]>(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-
-    if (total <= 7) {
-      return Array.from({ length: total }, (_, i) => i + 1);
-    }
-
-    const delta = 1;
-    const left = Math.max(2, current - delta);
-    const right = Math.min(total - 1, current + delta);
-
-    const pages: (number | null)[] = [1];
-
-    if (left > 2) pages.push(null);
-
-    for (let i = left; i <= right; i++) pages.push(i);
-
-    if (right < total - 1) pages.push(null);
-
-    pages.push(total);
-
-    return pages;
-  });
   readonly totalItems: WritableSignal<number> = signal<number>(0);
-  readonly rangeStart: Signal<number> = computed<number>(() =>
-    this.totalItems() === 0 ? 0 : (this.currentPage() - 1) * this.limit() + 1
-  );
-  readonly rangeEnd: Signal<number> = computed<number>(() =>
-    Math.min(this.currentPage() * this.limit(), this.totalItems())
-  );
+  //#endregion
+
+  //#region scroll infinito
+  private readonly sentinel: Signal<ElementRef<HTMLDivElement> | undefined> =
+    viewChild<ElementRef<HTMLDivElement>>('scrollAnchor');
+  private observer?: IntersectionObserver | undefined;
+  private requestInFlight: boolean = false;
   //#endregion
 
   //#region imports reducers
@@ -182,6 +162,10 @@ export class Proyectos implements OnInit {
     {
       initialValue: false,
     }
+  );
+  readonly isLoadingMore: Signal<boolean> = toSignal<boolean, false>(
+    this.store.select(loadingMoreProject),
+    { initialValue: false }
   );
   readonly projects: Signal<ProjectList[]> = toSignal<ProjectList[], ProjectList[]>(
     this.store.select(selectProjects),
@@ -209,12 +193,19 @@ export class Proyectos implements OnInit {
         'Página donde se demuestran todos los proyectos que he hecho a lo largo de mi experiencia',
     });
     this.seo.setIndexFollow(true);
+
+    effect(() => {
+      if (!this.isLoadingMore()) {
+        this.requestInFlight = false;
+      }
+    });
   }
 
   ngOnInit(): void {
     this.initFilters();
     this.initPagination();
     this.store.dispatch(ProyectoActions.getAllTechnologies());
+    this.initInfiniteScroll();
   }
   //#endregion
 
@@ -237,7 +228,6 @@ export class Proyectos implements OnInit {
           this.totalPages.set(value.totalPages);
           this.totalItems.set(value.totalItems);
           this.hasNextPage.set(value.hasNextPage);
-          this.hasPreviousPage.set(value.hasPreviousPage);
         },
         error: (error: HttpErrorResponse) => {
           console.error(`Error obteniendo la paginación: ${error.message}`);
@@ -263,6 +253,34 @@ export class Proyectos implements OnInit {
       });
   }
 
+  private initInfiniteScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    effect(
+      () => {
+        const el = this.sentinel()?.nativeElement;
+
+        if (this.observer) {
+          this.observer.disconnect();
+          this.observer = undefined;
+        }
+
+        if (!el) return;
+
+        this.observer = new IntersectionObserver(
+          entries => {
+            if (entries[0].isIntersecting) this.loadNextPage();
+          },
+          { rootMargin: '0px' }
+        );
+        this.observer.observe(el);
+      },
+      { injector: this.injector }
+    );
+
+    this.destroyRef.onDestroy(() => this.observer?.disconnect());
+  }
+
   private fetchProjects(page: number): void {
     this.store.dispatch(ProyectoActions.getProyectos({ paginado: this.buildPaginado(page) }));
   }
@@ -281,76 +299,24 @@ export class Proyectos implements OnInit {
     };
   }
 
-  goToPage(page: number): void {
-    if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  loadNextPage(): void {
+    if (!this.hasNextPage() || this.isLoading() || this.isLoadingMore() || this.requestInFlight) {
+      return;
     }
 
-    this.currentPage.set(page);
-    this.fetchProjects(page);
-  }
-
-  goToPrevious(): void {
-    if (this.hasPreviousPage()) {
-      if (isPlatformBrowser(this.platformId)) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      const page = this.currentPage() - 1;
-      this.currentPage.set(page);
-      this.fetchProjects(page);
-    }
-  }
-
-  goToNext(): void {
-    if (this.hasNextPage()) {
-      if (isPlatformBrowser(this.platformId)) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      const page = this.currentPage() + 1;
-      this.currentPage.set(page);
-      this.fetchProjects(page);
-    }
+    this.requestInFlight = true;
+    const nextPage = this.currentPage() + 1;
+    this.currentPage.set(nextPage);
+    this.fetchProjects(nextPage);
   }
 
   readonly paginationLabel: Signal<string> = computed(
-    () => `Mostrando ${this.rangeStart()} - ${this.rangeEnd()} de ${this.totalItems()} proyectos`
+    () => `Mostrando ${this.projects().length} de ${this.totalItems()} proyectos`
   );
 
-  readonly pageNumbers: Signal<(number | '...')[]> = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const maxPagesToShow = 5;
-    const pages: (number | '...')[] = [];
-
-    if (total <= maxPagesToShow) {
-      for (let i = 1; i <= total; i++) pages.push(i);
-      return pages;
-    }
-
-    let start = Math.max(1, current - Math.floor(maxPagesToShow / 2));
-    let end = start + maxPagesToShow - 1;
-
-    if (end > total) {
-      end = total;
-      start = Math.max(1, end - maxPagesToShow + 1);
-    }
-
-    if (start > 1) {
-      pages.push(1);
-      if (start > 2) pages.push('...');
-    }
-
-    for (let i = start; i <= end; i++) {
-      if (i !== 1 && i !== total) pages.push(i);
-    }
-
-    if (end < total) {
-      if (end < total - 1) pages.push('...');
-      pages.push(total);
-    }
-
-    return pages;
-  });
+  readonly showEndOfListMessage: Signal<boolean> = computed(
+    () => !this.hasNextPage() && this.totalPages() > 1
+  );
   //#endregion
 
   //#region funciones
