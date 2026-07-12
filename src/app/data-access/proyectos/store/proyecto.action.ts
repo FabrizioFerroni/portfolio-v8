@@ -17,7 +17,11 @@ export const ProyectoActions = createActionGroup({
     'Get All Technologies Success': props<{ data: string[] }>(),
     //TODO: respuesta fallida
     'Get Proyectos Home Failed': props<{ error: string; statusCode: number }>(),
-    'Get Proyectos Failed': props<{ error: string; statusCode: number }>(),
+    'Get Proyectos Failed': props<{
+      error: string;
+      statusCode: number;
+      paginado?: PaginacionProjectQuery;
+    }>(),
     'Get Proyecto by Slug Failed': props<{ error: string; statusCode: number }>(),
     'Get All Technologies Failed': props<{ error: string; statusCode: number }>(),
   },

@@ -249,7 +249,7 @@
         </div>
       }
 
-      @if (isLoading()) {
+      @if (isLoading() && projects().length === 0) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           @for (item of skeletonItems; track $index) {
             <div class="overflow-hidden flex flex-col h-full rounded-lg border">
@@ -388,48 +388,18 @@
       }
 
       <!-- paginación -->
-      @if (totalPages() > 1) {
-        <div class="flex justify-center mt-12">
-          <nav class="flex items-center gap-1">
-            <button
-              z-button
-              zSize="icon"
-              class="h-10 cursor-pointer text-muted-foreground"
-              zType="outline"
-              (click)="goToPrevious()"
-              [zDisabled]="currentPage() === 1">
-              <ng-icon name="lucideChevronLeft" class="h-4 w-4" />
-            </button>
-
-            <div class="flex items-center">
-              @for (pageNumber of pageNumbers(); track pageNumber; let i = $index) {
-                @if (typeof pageNumber === 'number') {
-                  <button
-                    z-button
-                    zSize="icon"
-                    class="cursor-pointer h-10 w-10 mx-1"
-                    [zType]="currentPage() === pageNumber ? 'default' : 'outline'"
-                    (click)="goToPage(pageNumber)">
-                    {{ pageNumber }}
-                  </button>
-                } @else {
-                  <span [id]="i" class="mx-1 text-muted-foreground">
-                    {{ pageNumber }}
-                  </span>
-                }
-              }
+      @if (projects().length > 0) {
+        <div #scrollAnchor class="flex items-center justify-center mt-12 h-10">
+          @if (isLoadingMore()) {
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <span
+                class="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent">
+              </span>
+              Cargando más proyectos...
             </div>
-
-            <button
-              z-button
-              zSize="icon"
-              class="h-10 cursor-pointer text-muted-foreground"
-              zType="outline"
-              (click)="goToNext()"
-              [zDisabled]="currentPage() === totalPages()">
-              <ng-icon name="lucideChevronRight" class="h-4 w-4" />
-            </button>
-          </nav>
+          } @else if (showEndOfListMessage()) {
+            <p class="text-sm text-muted-foreground">Ya viste todos los proyectos 🎉</p>
+          }
         </div>
       }
       <!-- fin paginación -->

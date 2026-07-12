@@ -43,6 +43,7 @@ export const getProyectos = createEffect(
               ProyectoActions.getProyectosFailed({
                 error,
                 statusCode,
+                paginado,
               })
             );
           })
