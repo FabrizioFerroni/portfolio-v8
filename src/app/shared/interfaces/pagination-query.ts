@@ -11,6 +11,7 @@ export interface PaginacionProjectQuery {
   category?: string | null;
   visibility?: string | null;
   technologies?: string[] | [];
+  sortBy?: string;
 }
 
 export interface PaginationProjectHomeQuery {

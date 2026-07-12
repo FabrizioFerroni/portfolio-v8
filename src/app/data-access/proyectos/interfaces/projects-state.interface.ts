@@ -14,6 +14,9 @@ export interface ProjectState {
   imageLoadingProject: boolean;
   imageErrorProject: string | null;
   imageStatusCodeProject: number | null;
+  //TODO: Technologies:
+  allTechnologies: string[];
+  isLoadingTechnologies: boolean;
 }
 
 export interface ProjectData {

@@ -15,6 +15,9 @@ const initialState: ProjectState = {
   imageLoadingProject: false,
   imageErrorProject: null,
   imageStatusCodeProject: null,
+  //TODO: Technologies
+  allTechnologies: [],
+  isLoadingTechnologies: false,
 };
 
 export const projectFeature = createFeature({
@@ -154,6 +157,57 @@ export const projectFeature = createFeature({
       imageLoadingProject: false,
       imageErrorProject: null,
       imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getAllTechnologies, state => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error: null,
+      statusCode: null,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+      allTechnologies: [],
+      isLoadingTechnologies: true,
+    })),
+
+    on(ProyectoActions.getAllTechnologiesSuccess, (state, { data }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error: null,
+      statusCode: 200,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+      allTechnologies: data,
+      isLoadingTechnologies: false,
+    })),
+
+    on(ProyectoActions.getAllTechnologiesFailed, (state, { error, statusCode }) => ({
+      ...state,
+      projects: [],
+      projectsHome: [],
+      project: null,
+      meta: null,
+      isLoading: false,
+      error,
+      statusCode,
+      imagesProject: null,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+      allTechnologies: [],
+      isLoadingTechnologies: false,
     }))
   ),
 });

@@ -14,11 +14,11 @@ export const getProyectosHome = createEffect(
       switchMap(({ param }) =>
         combineLatest([proyectoService.obtenerTodosHome(param), timer(MIN_LOADING_TIME)]).pipe(
           map(([{ body }]) => ProyectoActions.getProyectosHomeSuccess({ data: body!.data })),
-          catchError((error: HandledError) => {
+          catchError(({ message: error, statusCode }: HandledError) => {
             return of(
               ProyectoActions.getProyectosHomeFailed({
-                error: error.message,
-                statusCode: error.statusCode,
+                error,
+                statusCode,
               })
             );
           })
@@ -38,11 +38,11 @@ export const getProyectos = createEffect(
           timer(MIN_LOADING_TIME),
         ]).pipe(
           map(([{ body }]) => ProyectoActions.getProyectosSuccess({ data: body!.data })),
-          catchError((error: HandledError) => {
+          catchError(({ message: error, statusCode }: HandledError) => {
             return of(
               ProyectoActions.getProyectosFailed({
-                error: error.message,
-                statusCode: error.statusCode,
+                error,
+                statusCode,
               })
             );
           })
@@ -59,11 +59,32 @@ export const getProyectoBySlug = createEffect(
       switchMap(({ slug }) =>
         combineLatest([proyectoService.obtenerPorSlug(slug), timer(MIN_LOADING_TIME)]).pipe(
           map(([{ body }]) => ProyectoActions.getProyectoBySlugSuccess({ data: body!.data })),
-          catchError((error: HandledError) => {
+          catchError(({ message: error, statusCode }: HandledError) => {
             return of(
               ProyectoActions.getProyectosFailed({
-                error: error.message,
-                statusCode: error.statusCode,
+                error,
+                statusCode,
+              })
+            );
+          })
+        )
+      )
+    ),
+  { functional: true }
+);
+
+export const getProyectTechnologies = createEffect(
+  (action$ = inject(Actions), proyectoService = inject(ProyectoService)) =>
+    action$.pipe(
+      ofType(ProyectoActions.getAllTechnologies),
+      switchMap(() =>
+        combineLatest([proyectoService.obtenerTodasLasTecnologias(), timer(MIN_LOADING_TIME)]).pipe(
+          map(([{ body }]) => ProyectoActions.getAllTechnologiesSuccess({ data: body!.data })),
+          catchError(({ message: error, statusCode }: HandledError) => {
+            return of(
+              ProyectoActions.getAllTechnologiesFailed({
+                error,
+                statusCode,
               })
             );
           })
