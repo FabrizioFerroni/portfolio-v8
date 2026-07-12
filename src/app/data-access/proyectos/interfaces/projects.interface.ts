@@ -6,6 +6,7 @@ export interface ProjectList {
   publishedDate: Date | null;
   slug: string;
   visibility: string;
+  category: string;
   type: string;
   imageUrl: string;
   imageFullUrl: string;
@@ -28,6 +29,18 @@ export interface ProjectHome {
   visibility: string;
   urlProyect: string;
   urlGithub: string;
+  category: string;
+}
+
+export interface ProjectRelated {
+  id: string;
+  title: string;
+  summary: string;
+  imageUrl: string;
+  imageFullUrl: string;
+  slug: string;
+  visibility: string;
+  category: string;
 }
 
 export interface ProjectImageList {

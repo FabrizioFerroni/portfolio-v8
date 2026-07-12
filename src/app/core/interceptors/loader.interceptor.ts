@@ -18,9 +18,20 @@ export const loaderInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 
-  const excludedExactPaths = ['/api/projects', '/api/projects/home'];
+  const excludedExactPaths = ['/api/projects'];
+  const excludedPatternPaths = [
+    /^\/api\/images\/[^/]+$/,
+    /^\/api\/projects\/related\/[^/]+$/,
+    /^\/api\/projects\/[^/]+$/,
+  ];
 
-  if (excludedExactPaths.includes(new URL(req.url, 'http://localhost').pathname)) {
+  const pathname = new URL(req.url, 'http://localhost').pathname;
+
+  const isExcluded =
+    excludedExactPaths.includes(pathname) ||
+    excludedPatternPaths.some(pattern => pattern.test(pathname));
+
+  if (isExcluded) {
     return next(req);
   }
 

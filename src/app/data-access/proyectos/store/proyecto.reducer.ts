@@ -19,6 +19,11 @@ const initialState: ProjectState = {
   //TODO: Technologies
   allTechnologies: [],
   isLoadingTechnologies: false,
+  //TODO: Related projects
+  relatedProjects: [],
+  isLoadingRelatedProject: false,
+  relatedErrorProject: null,
+  relatedStatusCodeProject: null,
 };
 
 export const projectFeature = createFeature({
@@ -215,6 +220,49 @@ export const projectFeature = createFeature({
       imageStatusCodeProject: null,
       allTechnologies: [],
       isLoadingTechnologies: false,
+    })),
+
+    on(ProyectoActions.getImagesByProjectId, state => ({
+      ...state,
+      imageLoadingProject: true,
+      imageErrorProject: null,
+      imageStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getImagesByProjectIdSuccess, (state, { images }) => ({
+      ...state,
+      imageLoadingProject: false,
+      imageErrorProject: null,
+      imageStatusCodeProject: 200,
+      imagesProject: images,
+    })),
+
+    on(ProyectoActions.getImagesByProjectIdFailure, (state, { error, statusCode }) => ({
+      ...state,
+      imageErrorProject: error,
+      imageStatusCodeProject: statusCode,
+    })),
+
+    on(ProyectoActions.getRelatedProjectsByProjectId, state => ({
+      ...state,
+      relatedProjects: [],
+      isLoadingRelatedProject: true,
+      relatedErrorProject: null,
+      relatedStatusCodeProject: null,
+    })),
+
+    on(ProyectoActions.getRelatedProjectsByProjectIdSuccess, (state, { data }) => ({
+      ...state,
+      isLoadingRelatedProject: false,
+      relatedErrorProject: null,
+      relatedStatusCodeProject: 200,
+      relatedProjects: data,
+    })),
+
+    on(ProyectoActions.getRelatedProjectsByProjectIdFailure, (state, { error, statusCode }) => ({
+      ...state,
+      relatedErrorProject: error,
+      relatedStatusCodeProject: statusCode,
     }))
   ),
 });

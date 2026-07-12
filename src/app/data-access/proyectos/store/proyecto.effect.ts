@@ -94,3 +94,47 @@ export const getProyectTechnologies = createEffect(
     ),
   { functional: true }
 );
+
+export const getImageProjectsByProjectIdEffect = createEffect(
+  (actions$ = inject(Actions), proyectoService = inject(ProyectoService)) =>
+    actions$.pipe(
+      ofType(ProyectoActions.getImagesByProjectId),
+      switchMap(({ projectId }) =>
+        proyectoService.obtenerImagenesPorProjectId(projectId).pipe(
+          map(({ body }) => ProyectoActions.getImagesByProjectIdSuccess({ images: body!.data })),
+          catchError(({ message: error, statusCode }: HandledError) => {
+            return of(
+              ProyectoActions.getImagesByProjectIdFailure({
+                error,
+                statusCode,
+              })
+            );
+          })
+        )
+      )
+    ),
+  { functional: true }
+);
+
+export const getRelatedProjectsByProjectIdEffect = createEffect(
+  (actions$ = inject(Actions), proyectoService = inject(ProyectoService)) =>
+    actions$.pipe(
+      ofType(ProyectoActions.getRelatedProjectsByProjectId),
+      switchMap(({ projectId }) =>
+        proyectoService.obtenerRelatedProjectsPorProjectId(projectId).pipe(
+          map(({ body }) =>
+            ProyectoActions.getRelatedProjectsByProjectIdSuccess({ data: body!.data })
+          ),
+          catchError(({ message: error, statusCode }: HandledError) => {
+            return of(
+              ProyectoActions.getRelatedProjectsByProjectIdFailure({
+                error,
+                statusCode,
+              })
+            );
+          })
+        )
+      )
+    ),
+  { functional: true }
+);

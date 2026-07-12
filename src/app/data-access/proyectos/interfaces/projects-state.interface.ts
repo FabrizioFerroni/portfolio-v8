@@ -1,5 +1,5 @@
 import { Pagination } from '@/shared/interfaces';
-import { ProjectHome, ProjectImageList, ProjectList } from './projects.interface';
+import { ProjectHome, ProjectImageList, ProjectList, ProjectRelated } from './projects.interface';
 
 export interface ProjectState {
   projects: ProjectList[];
@@ -18,6 +18,11 @@ export interface ProjectState {
   //TODO: Technologies:
   allTechnologies: string[];
   isLoadingTechnologies: boolean;
+  //TODO: Related projects
+  relatedProjects: ProjectRelated[];
+  isLoadingRelatedProject: boolean;
+  relatedErrorProject: string | null;
+  relatedStatusCodeProject: number | null;
 }
 
 export interface ProjectData {
