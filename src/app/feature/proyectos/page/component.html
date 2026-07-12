@@ -402,50 +402,6 @@
           }
         </div>
       }
-      <!-- @if (totalPages() > 1) {
-        <div class="flex justify-center mt-12">
-          <nav class="flex items-center gap-1">
-            <button
-              z-button
-              zSize="icon"
-              class="h-10 cursor-pointer text-muted-foreground"
-              zType="outline"
-              (click)="goToPrevious()"
-              [zDisabled]="currentPage() === 1">
-              <ng-icon name="lucideChevronLeft" class="h-4 w-4" />
-            </button>
-
-            <div class="flex items-center">
-              @for (pageNumber of pageNumbers(); track pageNumber; let i = $index) {
-                @if (typeof pageNumber === 'number') {
-                  <button
-                    z-button
-                    zSize="icon"
-                    class="cursor-pointer h-10 w-10 mx-1"
-                    [zType]="currentPage() === pageNumber ? 'default' : 'outline'"
-                    (click)="goToPage(pageNumber)">
-                    {{ pageNumber }}
-                  </button>
-                } @else {
-                  <span [id]="i" class="mx-1 text-muted-foreground">
-                    {{ pageNumber }}
-                  </span>
-                }
-              }
-            </div>
-
-            <button
-              z-button
-              zSize="icon"
-              class="h-10 cursor-pointer text-muted-foreground"
-              zType="outline"
-              (click)="goToNext()"
-              [zDisabled]="currentPage() === totalPages()">
-              <ng-icon name="lucideChevronRight" class="h-4 w-4" />
-            </button>
-          </nav>
-        </div>
-      } -->
       <!-- fin paginación -->
     </div>
   </section>
