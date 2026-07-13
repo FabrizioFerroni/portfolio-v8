@@ -21,6 +21,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideStore } from '@ngrx/store';
 import { contactConfig, experienceConfig, newsletterConfig } from './feature/home/components';
 import { proyectosConfig } from './data-access';
+import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -52,6 +53,14 @@ export const appConfig: ApplicationConfig = {
       trace: true,
       traceLimit: 75,
       connectInZone: true,
+    }),
+    provideMarkdown({
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          gfm: true,
+        },
+      },
     }),
     ...contactConfig,
     ...newsletterConfig,

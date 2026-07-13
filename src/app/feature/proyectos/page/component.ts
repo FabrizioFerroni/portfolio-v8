@@ -8,13 +8,19 @@ import {
   lucideArrowRight,
   lucideChevronLeft,
   lucideChevronRight,
+  lucideContainer,
   lucideExternalLink,
   lucideFilter,
+  lucideFolder,
   lucideGithub,
   lucideLock,
+  lucideMonitor,
+  lucideMonitorSmartphone,
   lucideSearch,
+  lucideServer,
   lucideSortAsc,
   lucideSortDesc,
+  lucideTabletSmartphone,
   lucideX,
 } from '@ng-icons/lucide';
 import {
@@ -110,6 +116,12 @@ interface Category {
       lucideArrowRight,
       lucideChevronLeft,
       lucideChevronRight,
+      lucideMonitor,
+      lucideServer,
+      lucideMonitorSmartphone,
+      lucideTabletSmartphone,
+      lucideContainer,
+      lucideFolder,
     }),
   ],
 })
@@ -331,6 +343,21 @@ export class Proyectos implements OnInit {
     if (isSortBy(raw)) {
       this.sortBy.set(raw);
     }
+  }
+
+  private readonly categoryMeta: Record<string, { icon: string; label: string }> = {
+    frontend: { icon: 'lucideMonitor', label: 'Frontend' },
+    backend: { icon: 'lucideServer', label: 'Backend' },
+    fullstack: { icon: 'lucideMonitorSmartphone', label: 'FullStack' },
+    mobile: { icon: 'lucideTabletSmartphone', label: 'Mobile' },
+    devops: { icon: 'lucideContainer', label: 'DevOps' },
+  };
+
+  getCategoryMeta(category: string): {
+    icon: string;
+    label: string;
+  } {
+    return this.categoryMeta[category] ?? { icon: 'lucideFolder', label: category };
   }
   //#endregion
 

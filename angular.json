@@ -56,7 +56,8 @@
                 "output": "/"
               }
             ],
-            "styles": ["src/styles.css"],
+            "styles": ["src/styles.css", "node_modules/prismjs/themes/prism-tomorrow.css"],
+            "scripts": ["node_modules/prismjs/prism.js"],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {

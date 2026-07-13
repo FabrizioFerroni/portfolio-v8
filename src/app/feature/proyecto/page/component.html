@@ -256,8 +256,11 @@
                       <h3 class="text-2xl font-semibold mb-4 text-foreground">
                         Descripción General
                       </h3>
-                      <div class="whitespace-pre-line text-muted-foreground">
-                        {{ project.description }}
+                      <div>
+                        <markdown
+                          class="prose prose-invert prose-sm max-w-none"
+                          [data]="project.description">
+                        </markdown>
                       </div>
                     </div>
                   </f-card-content>
@@ -283,6 +286,22 @@
                             <p class="text-base">{{ feature.description }}</p>
                           </div>
                         </div>
+                      } @empty {
+                        <div
+                          class="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                          <div
+                            class="flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                            <ng-icon
+                              name="lucideListChecks"
+                              class="h-7 w-7 text-muted-foreground" />
+                          </div>
+                          <p class="text-base font-medium text-foreground mb-1">
+                            Sin características todavía
+                          </p>
+                          <p class="text-sm text-muted-foreground max-w-sm">
+                            Este proyecto todavía no tiene características cargadas.
+                          </p>
+                        </div>
                       }
                     </div>
                   </f-card-content>
@@ -295,130 +314,144 @@
                 <f-card>
                   <f-card-content cClass="p-6">
                     <h3 class="text-2xl font-semibold mb-6 text-foreground">Stack Tecnológico</h3>
-
-                    <div class="grid gap-6">
-                      @if (groupedTechnologies().frontend.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">Frontend</h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().frontend;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                    @if (hasTechnologies()) {
+                      <div class="grid gap-6">
+                        @if (groupedTechnologies().frontend.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">Frontend</h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().frontend;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
 
-                      @if (groupedTechnologies().backend.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">Backend</h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().backend;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                        @if (groupedTechnologies().backend.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">Backend</h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().backend;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
 
-                      @if (groupedTechnologies().devops.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">
-                            DevOps & Infraestructura
-                          </h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().devops;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                        @if (groupedTechnologies().devops.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">
+                              DevOps & Infraestructura
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().devops;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
 
-                      @if (groupedTechnologies().databases.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">Bases de datos</h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().databases;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                        @if (groupedTechnologies().databases.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">Bases de datos</h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().databases;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
 
-                      @if (groupedTechnologies().tools.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">Herramientas</h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().tools;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                        @if (groupedTechnologies().tools.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">Herramientas</h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().tools;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
 
-                      @if (groupedTechnologies().others.length > 0) {
-                        <div>
-                          <h4 class="text-lg font-medium mb-3 text-foreground">Otros</h4>
-                          <div class="flex flex-wrap gap-2">
-                            @for (
-                              tech of groupedTechnologies().others;
-                              track tech.id;
-                              let i = $index
-                            ) {
-                              <z-badge
-                                zType="outline"
-                                zShape="pill"
-                                class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
-                                {{ tech.name }}
-                              </z-badge>
-                            }
+                        @if (groupedTechnologies().others.length > 0) {
+                          <div>
+                            <h4 class="text-lg font-medium mb-3 text-foreground">Otros</h4>
+                            <div class="flex flex-wrap gap-2">
+                              @for (
+                                tech of groupedTechnologies().others;
+                                track tech.id;
+                                let i = $index
+                              ) {
+                                <z-badge
+                                  zType="outline"
+                                  zShape="pill"
+                                  class="text-sm py-1 px-3 hover:bg-primary/10 transition-colors duration-300">
+                                  {{ tech.name }}
+                                </z-badge>
+                              }
+                            </div>
                           </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="flex flex-col items-center justify-center py-16 text-center">
+                        <div
+                          class="flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+                          <ng-icon name="lucideCode" class="h-7 w-7 text-muted-foreground" />
                         </div>
-                      }
-                    </div>
+                        <p class="text-base font-medium text-foreground mb-1">
+                          Sin tecnologías todavía
+                        </p>
+                        <p class="text-sm text-muted-foreground max-w-sm">
+                          Este proyecto todavía no tiene tecnologías cargadas.
+                        </p>
+                      </div>
+                    }
                   </f-card-content>
                 </f-card>
               </f-tabs-content>

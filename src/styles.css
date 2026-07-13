@@ -1,6 +1,7 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 

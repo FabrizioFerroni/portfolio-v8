@@ -83,7 +83,13 @@
             <f-card-content
               cClass="p-6 flex flex-col flex-grow"
               [cId]="'project' + project.id + '-card'">
-              <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
+              <div class="mb-2 flex justify-between items-center">
+                <h3 class="text-xl font-semibold">{{ project.title }}</h3>
+                <span class="text-sm font-normal text-muted-foreground flex items-center gap-1">
+                  <ng-icon [name]="getCategoryMeta(project.category).icon" class="h-4 w-4" />
+                  {{ getCategoryMeta(project.category).label }}
+                </span>
+              </div>
               <p class="text-muted-foreground mb-4 line-clamp-2">
                 {{ project.summary }}
               </p>

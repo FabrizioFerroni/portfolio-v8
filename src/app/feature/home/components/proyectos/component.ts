@@ -15,10 +15,16 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideArrowRight,
+  lucideContainer,
   lucideExternalLink,
+  lucideFolder,
   lucideGithub,
   lucideGrid,
   lucideLock,
+  lucideMonitor,
+  lucideMonitorSmartphone,
+  lucideServer,
+  lucideTabletSmartphone,
 } from '@ng-icons/lucide';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -46,7 +52,19 @@ interface CategoryType {
   templateUrl: './component.html',
   styleUrl: './component.css',
   viewProviders: [
-    provideIcons({ lucideLock, lucideGithub, lucideExternalLink, lucideArrowRight, lucideGrid }),
+    provideIcons({
+      lucideLock,
+      lucideGithub,
+      lucideExternalLink,
+      lucideArrowRight,
+      lucideGrid,
+      lucideMonitor,
+      lucideServer,
+      lucideMonitorSmartphone,
+      lucideTabletSmartphone,
+      lucideContainer,
+      lucideFolder,
+    }),
   ],
 })
 export class ProyectosHome implements OnInit {
@@ -63,6 +81,7 @@ export class ProyectosHome implements OnInit {
     { id: 'backend', name: 'Backend' },
     { id: 'fullstack', name: 'Fullstack' },
     { id: 'mobile', name: 'Mobile' },
+    { id: 'devops', name: 'DevOps' },
   ];
   readonly skeletonItems = Array.from({ length: 6 }, (_, i) => i);
   //#endregion
@@ -93,6 +112,21 @@ export class ProyectosHome implements OnInit {
   //#region Funciones
   setFilter(id: string) {
     this.catFilter.set(id);
+  }
+
+  private readonly categoryMeta: Record<string, { icon: string; label: string }> = {
+    frontend: { icon: 'lucideMonitor', label: 'Frontend' },
+    backend: { icon: 'lucideServer', label: 'Backend' },
+    fullstack: { icon: 'lucideMonitorSmartphone', label: 'FullStack' },
+    mobile: { icon: 'lucideTabletSmartphone', label: 'Mobile' },
+    devops: { icon: 'lucideContainer', label: 'DevOps' },
+  };
+
+  getCategoryMeta(category: string): {
+    icon: string;
+    label: string;
+  } {
+    return this.categoryMeta[category] ?? { icon: 'lucideFolder', label: category };
   }
   //#endregion
 }
