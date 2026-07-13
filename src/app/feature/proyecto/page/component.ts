@@ -17,6 +17,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideArrowLeft,
   lucideArrowRight,
+  lucideCode,
   lucideContainer,
   lucideExternalLink,
   lucideFolder,
@@ -24,6 +25,7 @@ import {
   lucideGithub,
   lucideHome,
   lucideImageOff,
+  lucideListChecks,
   lucideLock,
   lucideMaximize2,
   lucideMonitor,
@@ -62,6 +64,7 @@ import {
 } from '@/data-access';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-proyecto',
@@ -73,6 +76,7 @@ import { Observable } from 'rxjs';
     NgIcon,
     ZardBadgeComponent,
     NgOptimizedImage,
+    MarkdownModule,
     TabsComponent,
     TabsListComponent,
     TabsTriggerComponent,
@@ -102,6 +106,8 @@ import { Observable } from 'rxjs';
       lucideTabletSmartphone,
       lucideContainer,
       lucideFolder,
+      lucideListChecks,
+      lucideCode,
     }),
   ],
 })
@@ -120,6 +126,17 @@ export class Proyecto {
     description: string;
   } | null>(null);
   activeTab: WritableSignal<string> = signal<string>('overview');
+  hasTechnologies = computed(() => {
+    const g = this.groupedTechnologies();
+    return (
+      g.frontend.length > 0 ||
+      g.backend.length > 0 ||
+      g.devops.length > 0 ||
+      g.databases.length > 0 ||
+      g.tools.length > 0 ||
+      g.others.length > 0
+    );
+  });
   //#endregion
 
   //#region imports reducers

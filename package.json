@@ -46,6 +46,9 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "express": "^5.1.0",
+    "marked": "^18.0.3",
+    "ngx-markdown": "^21.3.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.6.0",
     "tslib": "^2.3.0"
@@ -65,7 +68,7 @@
     "@eslint/js": "^9.39.4",
     "@ngrx/eslint-plugin": "^21.1.1",
     "@tailwindcss/postcss": "^4.1.12",
-    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "@typescript-eslint/eslint-plugin": "^8.61.0",
