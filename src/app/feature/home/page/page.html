@@ -5,7 +5,9 @@
   <app-proyectos-home />
   <app-experiencias />
   <app-newsletter />
-  <!-- <app-testimonials /> -->
+  @if (settingsService.showTestimonials()) {
+    <app-testimonials />
+  }
   <app-contacto />
   <app-footer />
 </main>

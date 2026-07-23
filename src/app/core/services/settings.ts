@@ -1,4 +1,4 @@
-import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Settings } from '../interfaces';
@@ -12,6 +12,9 @@ export class SettingsService extends BaseHttpService {
   readonly settings = this._settings.asReadonly();
   private readonly platformId = inject(PLATFORM_ID);
 
+  readonly maintenanceMode = computed(() => this._settings()?.maintenanceMode ?? false);
+  readonly showTestimonials = computed(() => this._settings()?.showTestimonials ?? false);
+
   async loadSettings(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -24,9 +27,5 @@ export class SettingsService extends BaseHttpService {
     );
 
     this._settings.set(response.data);
-  }
-
-  get maintenanceMode(): boolean {
-    return this._settings()?.maintenanceMode ?? false;
   }
 }

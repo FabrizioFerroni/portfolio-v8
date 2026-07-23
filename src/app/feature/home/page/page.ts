@@ -6,11 +6,11 @@ import {
   SobreMi,
   Experiencias,
   Newsletter,
-  // Testimonials,
   Contacto,
+  Testimonials,
 } from '../components';
 import { Footer } from '@/layout';
-import { SeoService } from '@/core';
+import { SeoService, SettingsService } from '@/core';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,7 @@ import { SeoService } from '@/core';
     ProyectosHome,
     Experiencias,
     Newsletter,
-    //Testimonials,
+    Testimonials,
     Contacto,
     Footer,
   ],
@@ -30,6 +30,7 @@ import { SeoService } from '@/core';
 })
 export class Home {
   private readonly seo = inject(SeoService);
+  protected readonly settingsService = inject(SettingsService);
 
   constructor() {
     this.seo.updateSeoTags({
