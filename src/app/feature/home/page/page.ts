@@ -6,7 +6,6 @@ import {
   SobreMi,
   Experiencias,
   Newsletter,
-  // Testimonials,
   Contacto,
   Testimonials,
 } from '../components';
