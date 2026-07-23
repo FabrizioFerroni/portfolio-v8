@@ -9,11 +9,11 @@ export const maintenanceGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =
 
   const isMaintenancePage = route.routeConfig?.path === `${Rutas.MANTENIMIENTO}`;
 
-  if (settings.maintenanceMode && !isMaintenancePage) {
+  if (settings.maintenanceMode() && !isMaintenancePage) {
     return router.createUrlTree([`/${Rutas.MANTENIMIENTO}`]);
   }
 
-  if (!settings.maintenanceMode && isMaintenancePage) {
+  if (!settings.maintenanceMode() && isMaintenancePage) {
     return router.createUrlTree(['/']);
   }
 
