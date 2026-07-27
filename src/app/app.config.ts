@@ -19,7 +19,12 @@ import {
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideStore } from '@ngrx/store';
-import { contactConfig, experienceConfig, newsletterConfig } from './feature/home/components';
+import {
+  contactConfig,
+  experienceConfig,
+  newsletterConfig,
+  testimonialConfig,
+} from './feature/home/components';
 import { proyectosConfig } from './data-access';
 import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 
@@ -66,5 +71,6 @@ export const appConfig: ApplicationConfig = {
     ...newsletterConfig,
     ...experienceConfig,
     ...proyectosConfig,
+    ...testimonialConfig,
   ],
 };

@@ -8,117 +8,130 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideChevronRight, lucideQuote } from '@ng-icons/lucide';
 import { map } from 'rxjs';
+import { TestimonialsService } from './service';
+import { TestimonialList } from './interface';
+import { ZardDialogService } from '@/shared/components/dialog';
+import { DetailTestimonialDialog } from './detail';
+import { ExceedsLengthPipe } from '@/shared/pipes';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-testimonials',
-  imports: [NgIcon, ZardButtonComponent, ZardTooltipImports, Card, CardContent, NgOptimizedImage],
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardTooltipImports,
+    Card,
+    CardContent,
+    NgOptimizedImage,
+    ExceedsLengthPipe,
+    RouterLink,
+  ],
   templateUrl: './component.html',
   styleUrl: './component.css',
   viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight, lucideQuote })],
 })
 export class Testimonials implements OnInit {
+  //#region Inyecciones
   private destroyRef = inject(DestroyRef);
   private breakpointObserver = inject(BreakpointObserver);
+  private testimonialsService = inject(TestimonialsService);
+  private readonly dialogService = inject(ZardDialogService);
+  //#endregion
 
-  // ── Estado ──────────────────────────────────────────────
+  //#region Variables
   currentIndex = signal(0);
   autoplay = signal(true);
+  testimonials = signal<TestimonialList[]>([]);
+  loading = signal(true);
 
-  // Touch state (no necesita ser signal porque no afecta la vista)
   private touchStart = 0;
   private touchEnd = 0;
   private autoplayTimer: ReturnType<typeof setTimeout> | null = null;
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
-  // ── Responsive ──────────────────────────────────────────
-  // Reemplaza useIsMobile(): convierte el Observable del CDK a signal
   isMobile = toSignal(
     this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(result => result.matches)),
     { initialValue: false }
   );
 
-  // ── Computed ─────────────────────────────────────────────
-  // Equivalente a getVisibleTestimonials() pero reactivo
   visibleTestimonials = computed(() => {
-    const total = this.testimonials.length;
-    const count = this.isMobile() ? 1 : 3;
+    const list = this.testimonials();
+    const total = list.length;
+    if (total === 0) return [];
+
+    const count = this.isMobile() ? 1 : Math.min(3, total);
+    const offset = Math.floor(count / 2);
     const result = [];
 
     for (let i = 0; i < count; i++) {
-      const index = (this.currentIndex() + i) % total;
-      result.push(this.testimonials[index]);
+      const index = (this.currentIndex() + i - offset + total) % total;
+      result.push({
+        ...list[index],
+        isActive: index === this.currentIndex() && !this.isMobile(),
+      });
     }
 
     return result;
   });
 
-  testimonials = [
-    {
-      id: 1,
-      name: 'Ana Martínez',
-      role: 'CEO, TechSolutions',
-      image: '/img/placeholder.svg?height=100&width=100',
-      text: 'Trabajar con Fabrizio fue una experiencia excepcional. Su capacidad para entender nuestras necesidades y convertirlas en soluciones tecnológicas superó todas nuestras expectativas. El proyecto se entregó a tiempo y con una calidad sobresaliente.',
-    },
-    {
-      id: 2,
-      name: 'Carlos Rodríguez',
-      role: 'Director de Producto, InnovateTech',
-      image: '/img/placeholder.svg?height=100&width=100',
-      text: 'Fabrizio demostró un dominio técnico impresionante y una gran capacidad para resolver problemas complejos. Su enfoque metódico y su comunicación clara hicieron que el proceso de desarrollo fuera fluido y sin complicaciones.',
-    },
-    {
-      id: 3,
-      name: 'Laura Sánchez',
-      role: 'CTO, StartupVision',
-      image: '/img/placeholder.svg?height=100&width=100',
-      text: 'La atención al detalle y el compromiso con la calidad son las características que definen el trabajo de Fabrizio. Transformó nuestra idea en un producto digital excepcional que ha recibido elogios de nuestros usuarios.',
-    },
-    {
-      id: 4,
-      name: 'Miguel Fernández',
-      role: 'Director de Marketing, GrowthDigital',
-      image: '/img/placeholder.svg?height=100&width=100',
-      text: 'Fabrizio no solo es un desarrollador técnicamente brillante, sino también un gran colaborador que entiende el aspecto comercial de los proyectos. Su capacidad para proponer mejoras y optimizaciones fue clave para el éxito de nuestra plataforma.',
-    },
-    {
-      id: 5,
-      name: 'Elena Torres',
-      role: 'Fundadora, EcoTech',
-      image: '/img/placeholder.svg?height=100&width=100',
-      text: 'Contratar a Fabrizio para desarrollar nuestra aplicación fue una de las mejores decisiones que tomamos. Su profesionalismo, conocimiento técnico y dedicación hicieron posible que lanzáramos nuestro producto antes de lo previsto y con una calidad excepcional.',
-    },
-  ];
+  readonly truncateLength = 220;
 
-  // ── Lifecycle ────────────────────────────────────────────
-  ngOnInit(): void {
-    this.startAutoplay();
+  truncate(text: string): string {
+    return text.length > this.truncateLength
+      ? text.slice(0, this.truncateLength).trimEnd() + '…'
+      : text;
   }
+  //#endregion
 
-  // ── Navegación ───────────────────────────────────────────
+  //#region Lifecycle
+  ngOnInit(): void {
+    this.testimonialsService.getTestimonials().subscribe({
+      next: ({ body }) => {
+        if (body) {
+          this.testimonials.set(body.data);
+          this.loading.set(false);
+        }
+      },
+      error: () => this.loading.set(false),
+    });
+  }
+  //#endregion
+
+  //#region VerDetalle
+  onViewDetail(test: TestimonialList): void {
+    this.dialogService.create({
+      zTitle: 'Ver detalle del testimonio',
+      zContent: DetailTestimonialDialog,
+      zData: {
+        testimonial: test,
+      },
+      zHideFooter: true,
+      zWidth: '600px',
+    });
+  }
+  //#endregion
+
+  //#region Navegación
   nextTestimonial(): void {
-    this.currentIndex.update(prev => (prev + 1) % this.testimonials.length);
+    const total = this.testimonials().length;
+    if (total === 0) return;
+    this.currentIndex.update(prev => (prev + 1) % total);
   }
 
   prevTestimonial(): void {
-    this.currentIndex.update(
-      prev => (prev - 1 + this.testimonials.length) % this.testimonials.length
-    );
+    const total = this.testimonials().length;
+    if (total === 0) return;
+    this.currentIndex.update(prev => (prev - 1 + total) % total);
   }
+  //#endregion
 
-  // ── Autoplay ─────────────────────────────────────────────
+  // #region Autoplay
   private startAutoplay(): void {
     this.clearAutoplay();
-
-    // effect() también funciona, pero setInterval con DestroyRef es más explícito
-    // para intervalos recurrentes
     this.intervalId = setInterval(() => {
-      if (this.autoplay()) {
-        this.nextTestimonial();
-      }
-    }, 5000);
-
-    // Cleanup automático cuando el componente se destruye
+      if (this.autoplay()) this.nextTestimonial();
+    }, 25000);
     this.destroyRef.onDestroy(() => this.clearAutoplay());
   }
 
@@ -131,15 +144,12 @@ export class Testimonials implements OnInit {
 
   handleInteraction(): void {
     this.autoplay.set(false);
-
     if (this.autoplayTimer) clearTimeout(this.autoplayTimer);
-
-    this.autoplayTimer = setTimeout(() => {
-      this.autoplay.set(true);
-    }, 10000);
+    this.autoplayTimer = setTimeout(() => this.autoplay.set(true), 10000);
   }
+  //#endregion
 
-  // ── Touch handlers ───────────────────────────────────────
+  // #region Touch handlers
   onTouchStart(e: TouchEvent): void {
     this.touchStart = e.targetTouches[0].clientX;
   }
@@ -150,7 +160,6 @@ export class Testimonials implements OnInit {
 
   onTouchEnd(): void {
     const diff = this.touchStart - this.touchEnd;
-
     if (diff > 50) {
       this.nextTestimonial();
       this.handleInteraction();
@@ -159,4 +168,5 @@ export class Testimonials implements OnInit {
       this.handleInteraction();
     }
   }
+  //#endregion
 }
