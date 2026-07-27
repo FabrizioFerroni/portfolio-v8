@@ -12,3 +12,4 @@ export * from './accordion';
 export * from './checkbox';
 export * from './tabs';
 export * from './dialog-image';
+export * from './go-top';

@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Loader } from './shared/components/fabriziodev';
+import { GoToTop, Loader } from './shared/components/fabriziodev';
 
 @Component({
   selector: 'app-root',
-  imports: [Loader, RouterOutlet],
+  imports: [Loader, RouterOutlet, GoToTop],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

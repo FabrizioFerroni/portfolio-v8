@@ -1,0 +1,14 @@
+@if (visible()) {
+  <button
+    z-button
+    type="button"
+    zVariant="ghost"
+    zSize="icon"
+    (click)="scrollToTop()"
+    aria-label="Volver arriba"
+    zTooltip="Volver arriba"
+    zPosition="left"
+    class="go-top-btn fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 dark:bg-primary/40 text-white shadow-lg transition-all duration-300 hover:bg-primary dark:hover:bg-primary hover:scale-105 animate-in fade-in slide-in-from-bottom-4 cursor-pointer">
+    <ng-icon name="lucideChevronUp" class="h-5 w-5" />
+  </button>
+}
