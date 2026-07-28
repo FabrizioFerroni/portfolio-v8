@@ -2,11 +2,16 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { Card, CardContent } from '@/shared/components/fabriziodev';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { NgOptimizedImage } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight, lucideQuote } from '@ng-icons/lucide';
+import {
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideMessageSquareOff,
+  lucideQuote,
+} from '@ng-icons/lucide';
 import { map } from 'rxjs';
 import { TestimonialsService } from './service';
 import { TestimonialList } from './interface';
@@ -26,10 +31,13 @@ import { RouterLink } from '@angular/router';
     NgOptimizedImage,
     ExceedsLengthPipe,
     RouterLink,
+    CommonModule,
   ],
   templateUrl: './component.html',
   styleUrl: './component.css',
-  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight, lucideQuote })],
+  viewProviders: [
+    provideIcons({ lucideChevronLeft, lucideChevronRight, lucideQuote, lucideMessageSquareOff }),
+  ],
 })
 export class Testimonials implements OnInit {
   //#region Inyecciones
@@ -68,7 +76,7 @@ export class Testimonials implements OnInit {
       const index = (this.currentIndex() + i - offset + total) % total;
       result.push({
         ...list[index],
-        isActive: index === this.currentIndex() && !this.isMobile(),
+        isActive: index === this.currentIndex() && total === 3 && !this.isMobile(),
       });
     }
 
@@ -82,6 +90,19 @@ export class Testimonials implements OnInit {
       ? text.slice(0, this.truncateLength).trimEnd() + '…'
       : text;
   }
+
+  protected readonly gridColsClass = computed(() => {
+    const count = this.visibleTestimonials().length;
+    if (count === 1) return 'grid-cols-1 max-w-md';
+    if (count === 2) return 'grid-cols-1 md:grid-cols-2 max-w-3xl';
+    return 'grid-cols-1 md:grid-cols-3';
+  });
+
+  protected readonly maxWidthClass = computed(() => {
+    const count = this.visibleTestimonials().length;
+    if (count === 3) return 'max-w-5xl ' + this.gridColsClass();
+    return this.gridColsClass();
+  });
   //#endregion
 
   //#region Lifecycle
