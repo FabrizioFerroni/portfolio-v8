@@ -1,7 +1,7 @@
 import { ZardBadgeComponent } from '@/shared/components/badge';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { Card, CardContent } from '@/shared/components/fabriziodev';
-import { NgOptimizedImage } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   computed,
@@ -18,11 +18,13 @@ import {
   lucideContainer,
   lucideExternalLink,
   lucideFolder,
+  lucideFolderOpen,
   lucideGithub,
   lucideGrid,
   lucideLock,
   lucideMonitor,
   lucideMonitorSmartphone,
+  lucideRotateCcw,
   lucideServer,
   lucideTabletSmartphone,
 } from '@ng-icons/lucide';
@@ -45,6 +47,7 @@ interface CategoryType {
     NgIcon,
     Card,
     CardContent,
+    CommonModule,
     ZardButtonComponent,
     ZardBadgeComponent,
     ZardSkeletonComponent,
@@ -64,6 +67,8 @@ interface CategoryType {
       lucideTabletSmartphone,
       lucideContainer,
       lucideFolder,
+      lucideFolderOpen,
+      lucideRotateCcw,
     }),
   ],
 })
@@ -84,6 +89,7 @@ export class ProyectosHome implements OnInit {
     { id: 'devops', name: 'DevOps' },
   ];
   readonly skeletonItems = Array.from({ length: 6 }, (_, i) => i);
+
   //#endregion
 
   //#region Store
@@ -93,6 +99,13 @@ export class ProyectosHome implements OnInit {
       .selectSignal(selectProjectHome)()
       .map((proj: ProjectHome) => proj)
   );
+
+  protected readonly gridColsClass = computed(() => {
+    const count = this.projectList().length;
+    if (count === 1) return 'grid-cols-1 max-w-md';
+    if (count === 2) return 'grid-cols-1 md:grid-cols-2 max-w-5xl';
+    return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+  });
   //#endregion
 
   //#region ciclo de vida de angular

@@ -55,8 +55,44 @@
           </f-card>
         }
       </div>
+    } @else if (projectList().length === 0) {
+      <div class="flex justify-center">
+        <f-card
+          cClass="max-w-md w-full flex flex-col items-center text-center p-10 rounded-xl border-dashed">
+          <div class="rounded-full bg-muted p-4 mb-4 w-16 h-16 flex items-center justify-center">
+            <ng-icon name="lucideFolderOpen" class="h-8 w-8 text-muted-foreground" />
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">
+            {{
+              catFilter() === 'all' ? 'Todavía no hay proyectos' : 'Sin proyectos en esta categoría'
+            }}
+          </h3>
+
+          <p class="text-sm text-muted-foreground mb-6 max-w-xs">
+            {{
+              catFilter() === 'all'
+                ? 'Estoy trabajando en nuevos proyectos. Volvé pronto para ver las novedades.'
+                : 'Probá con otra categoría o revisá todos los proyectos disponibles.'
+            }}
+          </p>
+
+          @if (catFilter() !== 'all') {
+            <button
+              type="button"
+              class="h-9 cursor-pointer"
+              z-button
+              zType="outline"
+              zSize="sm"
+              (click)="setFilter('all')">
+              <ng-icon name="lucideRotateCcw" class="mr-2 h-4 w-4" />
+              Ver todos los proyectos
+            </button>
+          }
+        </f-card>
+      </div>
     } @else {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid mx-auto gap-8" [ngClass]="gridColsClass()">
         @for (project of projectList(); track project.id) {
           <f-card cId="project-{{ project.id }}" cClass="overflow-hidden flex flex-col h-full">
             <div class="relative h-48 overflow-hidden">

@@ -12,11 +12,14 @@ import {
   lucideExternalLink,
   lucideFilter,
   lucideFolder,
+  lucideFolderOpen,
   lucideGithub,
   lucideLock,
   lucideMonitor,
   lucideMonitorSmartphone,
+  lucideRotateCcw,
   lucideSearch,
+  lucideSearchX,
   lucideServer,
   lucideSortAsc,
   lucideSortDesc,
@@ -122,6 +125,9 @@ interface Category {
       lucideTabletSmartphone,
       lucideContainer,
       lucideFolder,
+      lucideSearchX,
+      lucideRotateCcw,
+      lucideFolderOpen,
     }),
   ],
 })
@@ -159,6 +165,14 @@ export class Proyectos implements OnInit {
   readonly totalPages: WritableSignal<number> = signal<number>(1);
   readonly hasNextPage: WritableSignal<boolean> = signal<boolean>(false);
   readonly totalItems: WritableSignal<number> = signal<number>(0);
+
+  hasActiveFilters = computed(
+    () =>
+      this.searchTerm()!.trim().length > 0 ||
+      this.categoryFilter()!.trim() !== 'all' ||
+      this.visibilityFilter().trim() !== 'all' ||
+      this.techFilters().length > 0
+  );
   //#endregion
 
   //#region scroll infinito
