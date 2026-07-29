@@ -383,14 +383,38 @@
             </div>
           </div>
         } @else {
-          <div class="text-center py-12">
-            <p class="text-lg text-muted-foreground mb-4">
-              No se encontraron proyectos con los filtros seleccionados.
-            </p>
-            <button z-button (click)="clearFilters()" class="cursor-pointer">
-              Limpiar filtros
-            </button>
-          </div>
+          @if (hasActiveFilters()) {
+            <div class="flex justify-center">
+              <div class="max-w-md w-full flex flex-col items-center text-center p-10 rounded-xl">
+                <div
+                  class="rounded-full bg-muted p-4 mb-4 w-16 h-16 flex items-center justify-center">
+                  <ng-icon name="lucideSearchX" class="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 class="text-lg font-semibold mb-2">No se encontraron proyectos</h3>
+                <p class="text-sm text-muted-foreground mb-6 max-w-xs">
+                  No hay resultados con los filtros o la búsqueda seleccionados. Probá ajustarlos o
+                  limpiarlos.
+                </p>
+                <button z-button zType="default" (click)="clearFilters()" class="cursor-pointer">
+                  <ng-icon name="lucideRotateCcw" class="mr-2 h-4 w-4" />
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="flex justify-center">
+              <div class="max-w-md w-full flex flex-col items-center text-center p-10">
+                <div
+                  class="rounded-full bg-muted p-4 mb-4 w-16 h-16 flex items-center justify-center">
+                  <ng-icon name="lucideFolderOpen" class="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Todavía no hay proyectos</h3>
+                <p class="text-sm text-muted-foreground mb-6 max-w-xs">
+                  Estoy trabajando en nuevos proyectos. Volvé pronto para ver las novedades.
+                </p>
+              </div>
+            </div>
+          }
         }
       }
 
