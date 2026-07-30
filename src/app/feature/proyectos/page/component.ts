@@ -41,7 +41,7 @@ import {
   ElementRef,
   effect,
 } from '@angular/core';
-import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Accordion, Card, CardContent, Checkbox } from '@/shared/components/fabriziodev';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '@/core';
@@ -103,6 +103,7 @@ interface Category {
     CardContent,
     NgOptimizedImage,
     RouterLink,
+    CommonModule,
   ],
   templateUrl: './component.html',
   styleUrl: './component.css',
@@ -173,6 +174,13 @@ export class Proyectos implements OnInit {
       this.visibilityFilter().trim() !== 'all' ||
       this.techFilters().length > 0
   );
+
+  protected readonly gridColsClass = computed(() => {
+    const count = this.projects().length;
+    if (count === 1) return 'grid-cols-1 max-w-md';
+    if (count === 2) return 'grid-cols-1 md:grid-cols-2 max-w-5xl';
+    return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+  });
   //#endregion
 
   //#region scroll infinito
