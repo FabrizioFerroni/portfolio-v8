@@ -1,6 +1,6 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-const API_URL = process.env['API_URL_INTERNAL'];
+/* const API_URL = process.env['API_URL_INTERNAL'];
 if (!API_URL) {
   throw new Error('API_URL no está definida — requerida para getPrerenderParams');
 }
@@ -32,16 +32,16 @@ async function obtenerTodosLosSlugs(): Promise<string[]> {
 
   console.log(`[prerender] ${slugs.length} slugs obtenidos para proyecto/:slug`);
   return slugs;
-}
+} */
 
 export const serverRoutes: ServerRoute[] = [
   {
     path: 'proyecto/:slug',
-    renderMode: RenderMode.Prerender,
-    async getPrerenderParams() {
+    renderMode: RenderMode.Server,
+    /* async getPrerenderParams() {
       const slugs = await obtenerTodosLosSlugs();
       return slugs.map(slug => ({ slug }));
-    },
+    }, */
   },
   {
     path: '**',
