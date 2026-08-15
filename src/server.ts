@@ -13,8 +13,11 @@ const app = express();
 const angularApp = new AngularNodeAppEngine({
   allowedHosts: process.env['ALLOWED_HOST']
     ? process.env['ALLOWED_HOST'].split(',')
-    : ['localhost', '192.168.0.64', '192.168.0.74'],
+    : ['localhost', '192.168.0.64', '192.168.0.74', 'portfolio.demosfabriziodev.com'],
+  trustProxyHeaders: true,
 });
+
+app.set('trust proxy', true);
 
 /**
  * Example Express Rest API endpoints can be defined here.
