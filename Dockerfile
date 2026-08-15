@@ -35,7 +35,7 @@ ENV NODE_ENV=production
 
 RUN apk add --no-cache nginx supervisor
 
-COPY --from=build /app/dist/PortfolioV8 ./dist/PortfolioV8
+COPY --from=build --chown=node:node /app/dist/PortfolioV8 ./dist/PortfolioV8
 
 COPY nginx/proxy.conf /etc/nginx/http.d/default.conf
 COPY process/supervisord.conf /etc/supervisord.conf
