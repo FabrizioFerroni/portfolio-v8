@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Settings } from '../interfaces';
@@ -10,7 +10,6 @@ import { isPlatformBrowser } from '@angular/common';
 export class SettingsService extends BaseHttpService {
   private readonly _settings = signal<Settings | null>(null);
   readonly settings = this._settings.asReadonly();
-  private readonly platformId = inject(PLATFORM_ID);
 
   readonly maintenanceMode = computed(() => this._settings()?.maintenanceMode ?? false);
   readonly showTestimonials = computed(() => this._settings()?.showTestimonials ?? false);

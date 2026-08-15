@@ -1,10 +1,10 @@
 {
-  "extends": "./tsconfig.json",       // (1)
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/scripts",    // (2)
-    "module": "ESNext",               // (3)
-    "moduleResolution": "bundler",    // (3)
-    "types": ["node"]                 // (4)
+    "outDir": "./out-tsc/scripts",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node"]
   },
-  "include": ["scripts/**/*.ts"]      // (5)
+  "include": ["scripts/**/*.ts"]
 }
