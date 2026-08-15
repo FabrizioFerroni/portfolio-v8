@@ -35,3 +35,7 @@ const content = `export const environment = {
 
 fs.writeFileSync(targetFile, content);
 console.log(`✅ ${targetFile} generado`);
+
+const baseFile = path.join(__dirname, '../src/environments/environment.ts');
+fs.writeFileSync(baseFile, content);
+console.log(`✅ ${baseFile} generado`);
