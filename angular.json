@@ -43,6 +43,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "allowedCommonJsDependencies": ["lodash", "prismjs"],
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [

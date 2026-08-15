@@ -9,6 +9,7 @@ ARG FILE_URL
 ARG RELEASE
 ARG VERSION
 ARG API_KEY
+ARG API_URL_INTERNAL
 
 COPY package*.json ./
 RUN npm ci
@@ -22,10 +23,10 @@ ENV NODE_ENV=${NODE_ENV} \
     FILE_URL=${FILE_URL} \
     RELEASE=${RELEASE} \
     VERSION=${VERSION} \
-    API_KEY=${API_KEY}
+    API_KEY=${API_KEY} \
+    API_URL_INTERNAL=$API_URL_INTERNAL
 
 COPY . .
-RUN npm run prebuild
 RUN npm run build
 
 FROM node:22.23-alpine AS runtime

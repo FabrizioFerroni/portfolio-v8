@@ -17,8 +17,8 @@ if (!validEnvs.includes(process.env.NODE_ENV ?? '')) {
 
 const isProduction = process.env.NODE_ENV === 'production';
 const targetFile = isProduction
-  ? path.join(__dirname, '../src/environments/environment.prod.ts')
-  : path.join(__dirname, '../src/environments/environment.dev.ts');
+  ? path.join(__dirname, '../src/environments/environment.production.ts')
+  : path.join(__dirname, '../src/environments/environment.development.ts');
 
 const content = `export const environment = {
   production: ${isProduction},
