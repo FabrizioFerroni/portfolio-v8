@@ -31,6 +31,7 @@
   "references": [
     {
       "path": "./tsconfig.app.json"
-    }
+    },
+     { "path": "./tsconfig.scripts.json" }
   ]
 }
