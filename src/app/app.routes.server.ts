@@ -1,7 +1,10 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-const API_URL = process.env['API_URL_INTERNAL'] ?? 'http://localhost:4400';
-const API_KEY = process.env['API_KEY'] ?? 'vAPDG56jgRPycoh0otuHfhjnSV9rShHkJUa0dXoC2eE=';
+const API_URL = process.env['API_URL_INTERNAL'];
+if (!API_URL) {
+  throw new Error('API_URL no está definida — requerida para getPrerenderParams');
+}
+const API_KEY = process.env['API_KEY'];
 if (!API_KEY) {
   throw new Error('API_KEY no está definida — requerida para getPrerenderParams');
 }
