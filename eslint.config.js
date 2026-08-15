@@ -38,5 +38,16 @@ module.exports = tseslint.config(
     files: ['**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {},
+  },
+  {
+    files: ['scripts/**/*.js', 'scripts/**/*.ts'],
+    languageOptions: {
+      globals: {
+        require: 'readonly',
+        process: 'readonly',
+        module: 'readonly',
+        __dirname: 'readonly',
+      },
+    },
   }
 );
