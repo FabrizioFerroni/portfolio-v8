@@ -131,10 +131,13 @@
               </p>
 
               <div class="flex flex-wrap gap-2 mb-6 flex-grow items-start">
-                @for (tech of project.technologies; track tech.id) {
+                @for (tech of visibleTechnologies(project); track tech.id) {
                   <z-badge zType="secondary" zShape="pill">
                     {{ tech.name }}
                   </z-badge>
+                }
+                @if (hiddenTechCount(project) > 0) {
+                  <z-badge zType="outline" zShape="pill"> +{{ hiddenTechCount(project) }} </z-badge>
                 }
               </div>
 
@@ -155,19 +158,21 @@
                       Código
                     </a>
                   }
-                  <a
-                    z-button
-                    zType="outline"
-                    zSize="sm"
-                    [href]="project.urlProyect"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="flex items-center group h-9">
-                    <ng-icon
-                      name="lucideExternalLink"
-                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                    Demo
-                  </a>
+                  @if (project.urlProyect !== '') {
+                    <a
+                      z-button
+                      zType="outline"
+                      zSize="sm"
+                      [href]="project.urlProyect"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex items-center group h-9">
+                      <ng-icon
+                        name="lucideExternalLink"
+                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                      Demo
+                    </a>
+                  }
                 </div>
                 <a
                   z-button

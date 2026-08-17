@@ -30,7 +30,13 @@ import {
 } from '@ng-icons/lucide';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { loadingProject, ProjectHome, ProyectoActions, selectProjectHome } from '@/data-access';
+import {
+  loadingProject,
+  ProjectHome,
+  ProjectTechnologieList,
+  ProyectoActions,
+  selectProjectHome,
+} from '@/data-access';
 import { PaginationProjectHomeQuery } from '@/shared/interfaces';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 
@@ -89,7 +95,7 @@ export class ProyectosHome implements OnInit {
     { id: 'devops', name: 'DevOps' },
   ];
   readonly skeletonItems = Array.from({ length: 6 }, (_, i) => i);
-
+  protected readonly maxVisibleTechs = 4;
   //#endregion
 
   //#region Store
@@ -125,6 +131,14 @@ export class ProyectosHome implements OnInit {
   //#region Funciones
   setFilter(id: string) {
     this.catFilter.set(id);
+  }
+
+  protected visibleTechnologies(project: ProjectHome): ProjectTechnologieList[] {
+    return project.technologies.slice(0, this.maxVisibleTechs);
+  }
+
+  protected hiddenTechCount(project: ProjectHome): number {
+    return Math.max(0, project.technologies.length - this.maxVisibleTechs);
   }
 
   private readonly categoryMeta: Record<string, { icon: string; label: string }> = {
