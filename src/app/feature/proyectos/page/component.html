@@ -350,19 +350,21 @@
                             Código
                           </a>
                         }
-                        <a
-                          z-button
-                          zType="outline"
-                          zSize="sm"
-                          [href]="project.urlProyect"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="h-9 flex items-center group">
-                          <ng-icon
-                            name="lucideExternalLink"
-                            class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                          Demo
-                        </a>
+                        @if (project.urlProyect !== '') {
+                          <a
+                            z-button
+                            zType="outline"
+                            zSize="sm"
+                            [href]="project.urlProyect"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="h-9 flex items-center group">
+                            <ng-icon
+                              name="lucideExternalLink"
+                              class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                            Demo
+                          </a>
+                        }
                       </div>
                       <a
                         z-button

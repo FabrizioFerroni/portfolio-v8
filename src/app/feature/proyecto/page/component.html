@@ -149,19 +149,21 @@
                 <p class="text-lg mb-6">{{ project.summary }}</p>
 
                 <div class="flex flex-wrap gap-4">
-                  <a
-                    z-button
-                    zType="default"
-                    zSize="sm"
-                    [href]="project.urlProyect"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="h-10 flex items-center group">
-                    <ng-icon
-                      name="lucideExternalLink"
-                      class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-                    Ver Demo
-                  </a>
+                  @if (project.urlProyect !== '') {
+                    <a
+                      z-button
+                      zType="default"
+                      zSize="sm"
+                      [href]="project.urlProyect"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="h-10 flex items-center group">
+                      <ng-icon
+                        name="lucideExternalLink"
+                        class="mr-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                      Ver Demo
+                    </a>
+                  }
 
                   @if (project.visibility !== 'private') {
                     <a
