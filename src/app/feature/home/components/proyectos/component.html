@@ -95,13 +95,13 @@
       <div class="grid mx-auto gap-8" [ngClass]="gridColsClass()">
         @for (project of projectList(); track project.id) {
           <f-card cId="project-{{ project.id }}" cClass="overflow-hidden flex flex-col h-full">
-            <div class="relative h-48 overflow-hidden">
+            <div class="relative aspect-video overflow-hidden">
               <img
-                [ngSrc]="project.imageFullUrl || '/img/placeholder.svg'"
+                [ngSrc]="project.imageVariants.thumbnail.url || '/img/placeholder.svg'"
                 [alt]="project.title"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                class="object-cover w-full h-full transition-transform duration-500 hover:scale-110" />
+                class="object-cover" />
 
               @if (project.visibility === 'private') {
                 <div class="absolute top-3 right-3">

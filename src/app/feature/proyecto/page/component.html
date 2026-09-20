@@ -139,7 +139,7 @@
             <div class="grid md:grid-cols-1 gap-12 items-start">
               <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
                 <img
-                  [ngSrc]="project.imageFullUrl || '/img/placeholder.svg'"
+                  [ngSrc]="project.imageVariants.medium.url || '/img/placeholder.svg'"
                   [alt]="project.title"
                   fill
                   class="object-cover" />
@@ -524,12 +524,12 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @for (relationals of relatedProjects(); track relationals.id; let i = $index) {
                   <f-card [cId]="relationals.id.toString()" cClass="overflow-hidden group">
-                    <div class="relative h-48 overflow-hidden">
+                    <div class="relative aspect-video verflow-hidden">
                       <img
-                        [ngSrc]="relationals.imageFullUrl || '/img/placeholder.svg'"
+                        [ngSrc]="relationals.imageVariants.thumbnail.url || '/img/placeholder.svg'"
                         [alt]="`${project.title} - Imagen ${i + 1}`"
                         fill
-                        class="object-cover transition-transform duration-300 group-hover:scale-105" />
+                        class="object-cover" />
 
                       @if (relationals.visibility === 'private') {
                         <div class="absolute top-3 right-3">
