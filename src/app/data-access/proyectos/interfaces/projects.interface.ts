@@ -1,3 +1,5 @@
+export type ImageVariantName = 'thumbnail' | 'medium';
+
 export interface ProjectList {
   id: string;
   title: string;
@@ -8,13 +10,12 @@ export interface ProjectList {
   visibility: string;
   category: string;
   type: string;
-  imageUrl: string;
-  imageFullUrl: string;
   urlProyect: string;
   urlGithub: string;
   images: ProjectImageList[];
   technologies: ProjectTechnologieList[];
   features: ProjectFeatureList[];
+  imageVariants: Record<ImageVariantName, { url: string }>;
 }
 
 export interface ProjectHome {
@@ -22,25 +23,23 @@ export interface ProjectHome {
   title: string;
   summary: string;
   technologies: ProjectTechnologieList[];
-  imageUrl: string;
-  imageFullUrl: string;
   type: string;
   slug: string;
   visibility: string;
   urlProyect: string;
   urlGithub: string;
   category: string;
+  imageVariants: Record<ImageVariantName, { url: string }>;
 }
 
 export interface ProjectRelated {
   id: string;
   title: string;
   summary: string;
-  imageUrl: string;
-  imageFullUrl: string;
   slug: string;
   visibility: string;
   category: string;
+  imageVariants: Record<ImageVariantName, { url: string }>;
 }
 
 export interface ProjectImageList {

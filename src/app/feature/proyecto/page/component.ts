@@ -201,7 +201,7 @@ export class Proyecto {
         this.seo.updateSeoTags({
           title: project.title,
           description: project.description,
-          image: project.imageFullUrl,
+          image: project.imageVariants.thumbnail.url,
           type: 'proyect',
           locale: 'es_AR',
         });
