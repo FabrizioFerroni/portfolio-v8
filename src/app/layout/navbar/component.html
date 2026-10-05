@@ -30,14 +30,13 @@
           <span class="sr-only">Personalizar tema</span>
         </button>
 
-        <a
-          href="/cv/CV FabrizioFerroni 2026.pdf"
-          download="CV Fabrizio Ferroni.pdf"
+        <button
+          class="shrink-0 cursor-pointer"
           z-button
-          type="button"
-          class="cursor-pointer"
-          >Descargar CV</a
-        >
+          [disabled]="isDownloading()"
+          (click)="onDownloadCv()">
+          Descargar CV
+        </button>
       </div>
       <!-- Fin menu escritorio -->
       <!-- Botonera menu movil -->

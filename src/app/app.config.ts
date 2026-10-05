@@ -25,7 +25,7 @@ import {
   newsletterConfig,
   testimonialConfig,
 } from './feature/home/components';
-import { proyectosConfig } from './data-access';
+import { cvConfig, proyectosConfig } from './data-access';
 import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
@@ -72,5 +72,6 @@ export const appConfig: ApplicationConfig = {
     ...experienceConfig,
     ...proyectosConfig,
     ...testimonialConfig,
+    ...cvConfig,
   ],
 };

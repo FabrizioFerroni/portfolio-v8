@@ -18,11 +18,12 @@ export const loaderInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 
-  const excludedExactPaths = ['/api/projects'];
+  const excludedExactPaths = ['/api/projects', '/api/cv/download'];
   const excludedPatternPaths = [
     /^\/api\/images\/[^/]+$/,
     /^\/api\/projects\/related\/[^/]+$/,
     /^\/api\/projects\/[^/]+$/,
+    /^\/api\/cv\/download\/[^/]+$/,
   ];
 
   const pathname = new URL(req.url, 'http://localhost').pathname;
