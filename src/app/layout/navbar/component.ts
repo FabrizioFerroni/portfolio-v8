@@ -7,6 +7,7 @@ import {
   afterNextRender,
   Component,
   computed,
+  DestroyRef,
   inject,
   OnDestroy,
   OnInit,
@@ -19,6 +20,10 @@ import { lucideMenu, lucideSettings, lucideX } from '@ng-icons/lucide';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { SeoService } from '@/core';
+import { CVActions } from '@/data-access';
+import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Actions, ofType } from '@ngrx/effects';
 
 interface NavLinks {
   name: string;
@@ -39,10 +44,14 @@ export class Navbar implements OnInit, OnDestroy {
   activeFragment = signal<string>('');
   private observer: IntersectionObserver | null = null;
   private router = inject(Router);
+  private readonly store = inject(Store);
+  private destroyRef = inject(DestroyRef);
+  private actions$ = inject(Actions);
 
   layout = inject(LayoutService);
   isMovile = this.layout.isMobile;
   isOpen = signal<boolean>(false);
+  isDownloading = signal(false);
 
   scrolled = signal(false);
   headerClass = computed(() =>
@@ -100,6 +109,15 @@ export class Navbar implements OnInit, OnDestroy {
       this.handleScroll();
       window.addEventListener('scroll', this.handleScroll);
     }
+
+    this.actions$
+      .pipe(
+        ofType(CVActions.downloadCVSuccess, CVActions.downloadCVFailure),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isDownloading.set(false);
+      });
   }
 
   ngOnDestroy() {
@@ -175,5 +193,10 @@ export class Navbar implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  onDownloadCv(): void {
+    this.isDownloading.set(true);
+    this.store.dispatch(CVActions.downloadCV());
   }
 }

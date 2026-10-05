@@ -117,7 +117,9 @@
             "buildTarget": "PortfolioV8:build",
             "port": 4200,
             "host": "0.0.0.0",
-            "ssl": false,
+            "ssl": true,
+            "sslCert": "portfolio-private-64.pem",
+            "sslKey": "portfolio-public-64.pem",
             "open": false,
             "liveReload": true,
             "proxyConfig": "src/proxy.conf.json"

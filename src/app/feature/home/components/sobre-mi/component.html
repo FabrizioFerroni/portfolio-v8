@@ -61,17 +61,21 @@
             </f-card-content>
           </f-card>
         </div>
-
-        <a
-          href="/cv/CV FabrizioFerroni 2026.pdf"
-          download="CV Fabrizio Ferroni.pdf"
+        <button
+          class="shrink-0 cursor-pointer h-9"
           z-button
-          zSize="lg"
           zType="outline"
-          class="cursor-pointer">
-          <ng-icon name="lucideDownload" class="mr-2 h-4 w-4" />
-          Descargar CV
-        </a>
+          zSize="lg"
+          [disabled]="isDownloading()"
+          (click)="onDownloadCv()">
+          @if (isDownloading()) {
+            <ng-icon name="lucideLoader2" class="animate-spin mr-2 h-4 w-4" />
+            <span>Descargando CV</span>
+          } @else {
+            <ng-icon name="lucideDownload" class="h-4 w-4 mr-2" />
+            <span>Descargar CV</span>
+          }
+        </button>
       </div>
     </div>
   </div>
